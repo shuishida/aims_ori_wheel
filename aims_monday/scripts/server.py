@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 import rospy
-from std_srvs.srv import SetBool, 
+from std_srvs.srv import SetBool, SetBoolResponse
 
 def handle_bool(req):
 	# Request is of type SetBoolRequest
