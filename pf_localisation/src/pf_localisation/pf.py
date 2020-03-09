@@ -84,7 +84,13 @@ class PFLocaliser(PFLocaliserBase):
         Return:
             (geometry_msgs.msg.Pose) the random pose on the map
         """
-        return NotImplementedError("generate_random_pose not implemented!")
+        p = Pose() # Instantiate pose
+        while not self.is_valid_position(p.point): # Repeat until unoccupied point is found
+            p.point.x = random() * self.occupancy_map.info.width # Sample x location on map
+            p.point.y = random() * self.occupancy_map.info.heigth # Sample y location on map
+        p.point.z = 0.0 # No elevation, z-coordinate is 0
+        p.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0, 2*math.pi*random()) # Random rotation around z-axis (vertical axis)
+        return p # Return pose # NotImplementedError("generate_random_pose not implemented!")
 
 
     def initialise_particle_cloud(self, initial_pose):
@@ -107,7 +113,19 @@ class PFLocaliser(PFLocaliserBase):
         Returns:
             pos_array: A list of poses representing the particle cloud
         """
-        return NotImplementedError("initialise_particle_cloud not implemented!")
+        # 1st approach
+        p = [self.generate_random_pose(self) for i in xrange(self.NUMBER_PARTICLES)]
+        # 2nd approach
+        def self.generate_gaussian_pose(self, initial_pose):
+            p = Pose()
+            p.point.x = gauss(initial_pose.point.x, self.POSITION_STANDARD_DEVIATION)
+            p.point.y = gauss(initial_pose.point.y, self.POSITION_STANDARD_DEVIATION)
+            p.point.z = initial_pose
+            initial_yaw = tf.transformations.euler_from_quaternion(initial_pose.orientation)[2] # Convert initial orientation from quaternion into euler representation and get yaw angle
+            rand_yaw = vonmises(initial_yaw, self.ORIENTATION_STANDARD_DEVIATION) # Generate random yaw angle
+            p.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0, rand_yaw) # Convert yaw angle into quaternion representation
+        p = [self.generate_gaussian_pose(initial_pose) for i in xrange(self.NUMBER_PARTICLES)]
+        return p # Return list of poses # NotImplementedError("initialise_particle_cloud not implemented!")
 
 
     def update_particle_cloud(self, scan):
