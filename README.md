@@ -1,6 +1,18 @@
 # aims_cdt_week
 Contains ROS packages to be used for the CDT week.
 
+## Run
+Currently, the simulation is run using either of:
+
+roslaunch aims_jackal_sim jackal_sim.launch
+
+roslaunch aims_jackal_sim jackal_sim_empty.launch
+
+To use the PS4 controller, add the optional argument joystick:=true
+
+Door configuration can be reset with:
+
+rosrun aims_jackal_sim reset_sim.py
 
 ## Setup
 Install the Jackal packages:
@@ -17,17 +29,6 @@ Currently it is necessary add to the Gazebo model path as follows:
 
 export GAZEBO_MODEL_PATH=/path/to/catkin_workspace/src/aims_cdt_week/aims_jackal_sim/models:$GAZEBO_MODEL_PATH 
 
-## Run
-Currently, the simulation is run using:
-
-roslaunch aims_jackal_sim jackal_sim.launch
-
-To use the PS4 controller, add the optional argument joystick:=true
-
-Door configuration can be reset with:
-
-rosrun aims_jackal_sim reset_sim.py
-
 ## pf_localisation package
 Package for particle filter locaisation.
 
@@ -36,16 +37,6 @@ export PYTHONPATH=/path/to/catkin/workspace/src/aims_cdt_week/pf_localisation/sr
 
 You may get errors related to `lasertrace.so`. If this is the case, run `./compile.sh` in the laser trace directory.
 
-## aims_tts package
-Package for text to speech.
-Will need to install `pyttsx` Python package. Run:
-`python -m pip install pyttsx`
-
-## orion_door_pass package
-Package for door checking.
-Contains one action called DoorCheck, which takes a target pose and number of readings.
-Setting the target pose to an empty PoseStamped() message should be fine.
-The number of readings to set may have to be tuned.
 
 ## using the existing topological map
 To run mongo_db, you will first need to make an empty folder called 'db' in the aims_jackal_sim folder. Start by running a mongo_db database:
