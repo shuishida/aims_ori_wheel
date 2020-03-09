@@ -15,9 +15,9 @@ class TestServer:
     rate = rospy.Rate(1)
     target = goal.goal
     count = 0
-    while count < target and not rospy.is_shutdown():        
+    while count < target and not rospy.is_shutdown():
         if self.server.is_preempt_requested():
-            self.server.set_preempted(TestResult(count))            
+            self.server.set_preempted(TestResult(count))
             return
 
         count += 1
