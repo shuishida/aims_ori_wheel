@@ -1,3 +1,5 @@
+![alt text](ORI_AIMS_Week_Logo_Banner.png "logo")
+
 # aims_cdt_week
 Contains ROS packages to be used for the CDT week.
 
