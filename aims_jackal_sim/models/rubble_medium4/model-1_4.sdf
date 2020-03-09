@@ -1,0 +1,14 @@
+<?xml version="1.0" ?><sdf version="1.4">
+  <model name="rubble_medium4">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://rubble_medium4/meshes/rubble_medium4.dae</uri>
+          <scale>2.8 2.8 2.8</scale></mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

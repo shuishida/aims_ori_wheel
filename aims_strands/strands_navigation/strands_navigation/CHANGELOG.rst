@@ -1,0 +1,178 @@
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Changelog for package strands_navigation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1.1.0 (2019-11-27)
+------------------
+* Merge branch 'indigo-devel' into fix_route_search
+* Merge pull request `#376 <https://github.com/strands-project/strands_navigation/issues/376>`_ from gpdas/exec_policy_reconf_edge
+  enable edge_reconfig for execute_policy_mode server
+* removing message_store_map_switcher from dependencies
+* Contributors: Jaime Pulido Fentanes, gpdas
+
+1.0.8 (2019-06-04)
+------------------
+* Merge branch 'indigo-devel' of https://github.com/strands-project/strands_navigation into indigo-devel
+* Contributors: Bruno Lacerda
+
+1.0.7 (2018-10-26)
+------------------
+
+1.0.6 (2018-07-17)
+------------------
+
+1.0.5 (2018-04-17)
+------------------
+
+1.0.4 (2017-06-23)
+------------------
+
+1.0.3 (2017-01-11)
+------------------
+
+1.0.2 (2016-10-31)
+------------------
+* adding emergency behaviours as a dependency (`#328 <https://github.com/strands-project/strands_navigation/issues/328>`_)
+* Contributors: Jaime Pulido Fentanes
+
+1.0.1 (2016-06-21)
+------------------
+
+1.0.0 (2016-06-09)
+------------------
+
+0.0.45 (2016-06-06)
+-------------------
+
+0.0.44 (2016-05-30)
+-------------------
+
+0.0.43 (2016-05-25)
+-------------------
+* 0.0.42
+* updated changelogs
+* 0.0.41
+* updated changelogs
+* Contributors: Jenkins
+
+0.0.42 (2016-03-21)
+-------------------
+
+0.0.41 (2016-03-03)
+-------------------
+
+0.0.40 (2016-02-07)
+-------------------
+
+0.0.39 (2016-01-28)
+-------------------
+
+0.0.38 (2015-11-17)
+-------------------
+
+0.0.37 (2015-08-26)
+-------------------
+
+0.0.36 (2015-05-17)
+-------------------
+
+0.0.35 (2015-05-10)
+-------------------
+
+0.0.34 (2015-05-05)
+-------------------
+
+0.0.32 (2015-04-12)
+-------------------
+
+0.0.31 (2015-04-10)
+-------------------
+* Adding topological_logging_manager to meta package
+  Closes `#212 <https://github.com/strands-project/strands_navigation/issues/212>`_
+* Contributors: Christian Dondrup
+
+0.0.29 (2015-03-23)
+-------------------
+
+0.0.28 (2015-03-20)
+-------------------
+
+0.0.27 (2015-03-19)
+-------------------
+
+0.0.26 (2015-03-18)
+-------------------
+
+0.0.25 (2015-03-18)
+-------------------
+
+0.0.24 (2015-03-17)
+-------------------
+
+0.0.23 (2014-12-17)
+-------------------
+
+0.0.22 (2014-11-26)
+-------------------
+
+0.0.21 (2014-11-23)
+-------------------
+
+0.0.20 (2014-11-21)
+-------------------
+
+0.0.19 (2014-11-21)
+-------------------
+
+0.0.18 (2014-11-21)
+-------------------
+
+0.0.17 (2014-11-21)
+-------------------
+
+0.0.16 (2014-11-21)
+-------------------
+
+0.0.15 (2014-11-19)
+-------------------
+
+0.0.14 (2014-11-19)
+-------------------
+
+0.0.12 (2014-11-17)
+-------------------
+* including run dependencies on package.xml
+* Contributors: Jaime Pulido Fentanes
+
+0.0.11 (2014-11-14)
+-------------------
+
+0.0.10 (2014-11-14)
+-------------------
+
+0.0.9 (2014-11-12)
+------------------
+
+0.0.8 (2014-11-11)
+------------------
+
+0.0.6 (2014-11-06)
+------------------
+
+0.0.5 (2014-11-05)
+------------------
+
+0.0.4 (2014-10-30)
+------------------
+
+0.0.3 (2014-10-29)
+------------------
+
+0.0.2 (2014-10-29)
+------------------
+* 0.0.1
+* fixed CMakeLists.txt to be a proper meta package
+* added changelogs
+* Adding Missing TopologicalMap.msg and changing maintainer emails, names and Licences for Packages
+* create metapackage
+* Contributors: Bruno Lacerda, Jaime Pulido Fentanes, Marc Hanheide

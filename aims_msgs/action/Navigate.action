@@ -1,0 +1,8 @@
+# Goal
+geometry_msgs/Pose goal
+---
+# Define the result
+bool succeeded
+---
+# Define a feedback message
+

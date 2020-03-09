@@ -1,0 +1,5 @@
+#helper_class must be of class monitored_navigation.ui_helper.UIHelper
+string name
+strands_navigation_msgs/DynClassLoaderDef ui_helper
+---
+bool success

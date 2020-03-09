@@ -1,0 +1,13 @@
+string edge_id
+string recover_mechanism #bumper_recovery, backtrack_recovery, nav_help_recovery
+bool was_helped
+int64 n_help_requests
+time event_start_time
+geometry_msgs/Pose event_start_pose
+time event_end_time
+geometry_msgs/Pose event_end_pose
+actionlib_msgs/GoalID goal_id
+sensor_msgs/Image global_costmap_image
+sensor_msgs/Image local_costmap_image
+sensor_msgs/Image camera_image
+

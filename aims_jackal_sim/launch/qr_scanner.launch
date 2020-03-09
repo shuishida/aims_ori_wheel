@@ -1,0 +1,6 @@
+<launch>
+  <!-- Node to detect qr codes -->
+  <node pkg="nodelet" type="nodelet" name="qr_detector" args="standalone qr_detector/qr_detector_nodelet">
+        <remap from="image" to="camera/color/image_raw"/>
+  </node>
+</launch>

@@ -1,0 +1,5 @@
+#all vectors should have the same length. helper_class must be of class monitored_navigation.ui_helper.UIHelper
+string[] names
+strands_navigation_msgs/DynClassLoaderDef[] ui_helpers
+---
+bool success

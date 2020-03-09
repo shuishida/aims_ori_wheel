@@ -1,0 +1,21 @@
+<?xml version="1.0" ?><sdf version="1.6">
+  <model name="rubble_large3">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://rubble_large3/meshes/rubble_large3.dae</uri>
+          <scale>2.8 2.8 2.8</scale></mesh>
+        </geometry>
+      </visual>
+       <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://rubble_large1/meshes/rubble_large1.dae</uri>
+          <scale>2.8 2.8 2.8</scale></mesh>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>

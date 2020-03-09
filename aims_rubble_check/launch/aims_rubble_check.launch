@@ -1,0 +1,3 @@
+<launch>
+	<node pkg="aims_rubble_check" type="rubble_check_server.py" name="rubble_check" respawn="true" output="screen" />
+</launch>
