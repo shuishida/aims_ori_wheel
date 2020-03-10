@@ -160,6 +160,7 @@ class PFLocaliser(PFLocaliserBase):
         normalize(posterior)
         # These important factors are used to choose a new set of particles that appropriately represents the a posteriori probability density function (resampling)
         
+        # self.NUMBER_PREDICTED_READINGS 
         self.particlecloud.poses = 
         return # NotImplementedError("update_particle_cloud not implemented!")
 
