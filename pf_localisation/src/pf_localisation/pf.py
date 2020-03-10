@@ -132,7 +132,7 @@ class PFLocaliser(PFLocaliserBase):
              xrange(self.NUMBER_PARTICLES)]  # Must use PoseArray() instead?
         
         p_arr = PoseArray()
-        [p_arr.append(p[i]) for i in xrange(self.NUMBER_PARTICLES)] # Convert list to PoseArray
+        [p_arr.append(pose) for pose in p] # Convert list to PoseArray
         return p_arr  # Return list of poses # NotImplementedError("initialise_particle_cloud not implemented!")
 
     def update_particle_cloud(self, scan):
