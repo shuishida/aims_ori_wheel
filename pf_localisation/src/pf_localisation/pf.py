@@ -226,6 +226,9 @@ class PFLocaliser(PFLocaliserBase):
             return resampled
 
         self.particlecloud.poses = resample(self.particlecloud.poses, w)
+        
+        for i in range(40):
+            self.particlecloud.poses[i] = self.generate_random_pose()
 
         # self.NUMBER_PREDICTED_READINGS
 
