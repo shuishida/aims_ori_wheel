@@ -114,7 +114,7 @@ class PFLocaliser(PFLocaliserBase):
             pos_array: A list of poses representing the particle cloud
         """
         # 1st approach
-        p = [self.generate_random_pose(self) for i in xrange(self.NUMBER_PARTICLES)]
+        p = [self.generate_random_pose(self) for i in xrange(self.NUMBER_PARTICLES)] # Must use PoseArray() instead?
         # 2nd approach
         def self.generate_gaussian_pose(self, initial_pose):
             p = Pose()
@@ -124,7 +124,7 @@ class PFLocaliser(PFLocaliserBase):
             initial_yaw = tf.transformations.euler_from_quaternion(initial_pose.orientation)[2] # Convert initial orientation from quaternion into euler representation and get yaw angle
             rand_yaw = vonmises(initial_yaw, self.ORIENTATION_STANDARD_DEVIATION) # Generate random yaw angle
             p.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0, rand_yaw) # Convert yaw angle into quaternion representation
-        p = [self.generate_gaussian_pose(initial_pose) for i in xrange(self.NUMBER_PARTICLES)]
+        p = [self.generate_gaussian_pose(initial_pose) for i in xrange(self.NUMBER_PARTICLES)] # Must use PoseArray() instead?
         return p # Return list of poses # NotImplementedError("initialise_particle_cloud not implemented!")
 
 
@@ -152,7 +152,16 @@ class PFLocaliser(PFLocaliserBase):
         Args:
             scan: The LaserScan message
         """
-        return NotImplementedError("update_particle_cloud not implemented!")
+        # Samples (particles) are drawn from the original distribution
+        # The particles are driven through the nonlinear function
+        # Each particle is weighted with an importance factor that incorporates the knowledge of the measurement
+        w = [self.sensor_model.get_weight(scan, particle) for particle in self.particlecloud.poses] # Compute the likelihood weighting for each of a set of particles.
+        posterior = prior * likelihood
+        normalize(posterior)
+        # These important factors are used to choose a new set of particles that appropriately represents the a posteriori probability density function (resampling)
+        
+        self.particlecloud.poses = 
+        return # NotImplementedError("update_particle_cloud not implemented!")
 
 
     def estimate_pose(self):
@@ -171,4 +180,26 @@ class PFLocaliser(PFLocaliserBase):
         Return:
             pose: The estimated pose (should be a geometry_msgs.Pose message)
         """
-        return NotImplementedError("estimate_pose not implemented!")
+        estimate = Pose() # Instantiate pose estimate
+        estimate.point = np.mean(self.particlecloud.poses.point) # Average points (position)
+        def avg_quaternion(self, Q):
+        """ Q is an Mx4 matrix of quaternions. Q_avg is the average quaternion.
+        Based on
+        Markley, F. Landis, Yang Cheng, John Lucas Crassidis, and Yaakov Oshman. 
+        "Averaging quaternions." Journal of Guidance, Control, and Dynamics 30, 
+        no. 4 (2007): 1193-1197. """
+            A = np.zeros((4,4)) # Form symmetric accumulator matrix
+            M = Q.shape[0]
+            for i in range(M)
+                q = Q[i,:]
+                if q[0] < 0: # Handle antipodal configuration
+                    q = -q
+                A = np.outer(q, q) + A # Rank 1 update
+            A = (1.0 / M) * A # Scale
+            # Get eigenvector corresponding to largest eigenvalue # [Qavg, Eval] = eigs(A,1)
+            vals, vects = np.linalg.eig(A)
+            maxcol = list(vals).index(max(vals))
+            Q_avg = vects[:,maxcol]
+            return Q_avg
+        estimate.orientation = self.avg_quaternion(self.particlecloud.poses.orientation) # Average quaternions (orientation)
+        return estimate # NotImplementedError("estimate_pose not implemented!")
