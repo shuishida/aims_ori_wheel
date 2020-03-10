@@ -100,6 +100,10 @@ class PFLocaliser(PFLocaliserBase):
             p.position.y = random() * self.occupancy_map.info.height  # Sample y location on map
         p.position.z = 0.0  # No elevation, z-coordinate is 0
 
+        p.orientation.w = 1.0
+        p.orientation.x = 0.0
+        p.orientation.y = 0.0
+        p.orientation.z = 0.0
         p.orientation = rotateQuaternion(p.orientation, 2 * math.pi * random())
 
         return p  # Return pose # NotImplementedError("generate_random_pose not implemented!")
