@@ -1,0 +1,569 @@
+- meta:
+    map: unused
+    node: WayPoint1
+    pointset: aims_map
+    published_at: 1970-01-01 00:03:44.609000+00:00
+    tag:
+    - outside_room_3
+    timestamp: 224609000000
+  node:
+    edges:
+    - action: move_base
+      edge_id: WayPoint1_WayPoint5
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint5
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint1_WayPoint3
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint3
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint1_WayPoint2
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint2
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint1_WayPoint4
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint4
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    localise_by_topic: ''
+    map: unused
+    name: WayPoint1
+    pointset: aims_map
+    pose:
+      orientation:
+        w: 0.637652635574
+        x: -4.42563141689e-08
+        y: -6.47427489398e-09
+        z: 0.770324110985
+      position:
+        x: 3.05963802338
+        y: 2.90865397453
+        z: 0.0
+    verts:
+    - x: 0.689999997616
+      y: 0.287000000477
+    - x: 0.287000000477
+      y: 0.689999997616
+    - x: -0.287000000477
+      y: 0.689999997616
+    - x: -0.689999997616
+      y: 0.287000000477
+    - x: -0.689999997616
+      y: -0.287000000477
+    - x: -0.287000000477
+      y: -0.689999997616
+    - x: 0.287000000477
+      y: -0.689999997616
+    - x: 0.689999997616
+      y: -0.287000000477
+    xy_goal_tolerance: 0.3
+    yaw_goal_tolerance: 0.1
+- meta:
+    map: unused
+    node: WayPoint2
+    pointset: aims_map
+    published_at: 1970-01-01 00:04:13.769000+00:00
+    tag:
+    - outside_room_2
+    timestamp: 253769000000
+  node:
+    edges:
+    - action: move_base
+      edge_id: WayPoint2_WayPoint7
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint7
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint2_WayPoint1
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint1
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint2_WayPoint9
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint9
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint2_WayPoint4
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint4
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint2_WayPoint3
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint3
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    localise_by_topic: ''
+    map: unused
+    name: WayPoint2
+    pointset: aims_map
+    pose:
+      orientation:
+        w: 0.0990025028586
+        x: 5.26733927586e-08
+        y: 2.88532504555e-08
+        z: -0.995087325573
+      position:
+        x: 3.21704649925
+        y: 2.40351033211
+        z: 0.0
+    verts:
+    - x: 0.689999997616
+      y: 0.287000000477
+    - x: 0.287000000477
+      y: 0.689999997616
+    - x: -0.287000000477
+      y: 0.689999997616
+    - x: -0.689999997616
+      y: 0.287000000477
+    - x: -0.689999997616
+      y: -0.287000000477
+    - x: -0.287000000477
+      y: -0.689999997616
+    - x: 0.287000000477
+      y: -0.689999997616
+    - x: 0.689999997616
+      y: -0.287000000477
+    xy_goal_tolerance: 0.3
+    yaw_goal_tolerance: 0.1
+- meta:
+    map: unused
+    node: WayPoint3
+    pointset: aims_map
+    published_at: 1970-01-01 00:04:40.630000+00:00
+    tag:
+    - outside_room_4
+    timestamp: 280630000000
+  node:
+    edges:
+    - action: move_base
+      edge_id: WayPoint3_WayPoint1
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint1
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint3_WayPoint6
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint6
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint3_WayPoint4
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint4
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint3_WayPoint2
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint2
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    localise_by_topic: ''
+    map: unused
+    name: WayPoint3
+    pointset: aims_map
+    pose:
+      orientation:
+        w: 0.809849977493
+        x: -3.35372511984e-08
+        y: -3.16151410606e-10
+        z: 0.586637079716
+      position:
+        x: 4.25665187836
+        y: 2.69533443451
+        z: 0.0
+    verts:
+    - x: 0.689999997616
+      y: 0.287000000477
+    - x: 0.287000000477
+      y: 0.689999997616
+    - x: -0.287000000477
+      y: 0.689999997616
+    - x: -0.689999997616
+      y: 0.287000000477
+    - x: -0.689999997616
+      y: -0.287000000477
+    - x: -0.287000000477
+      y: -0.689999997616
+    - x: 0.287000000477
+      y: -0.689999997616
+    - x: 0.689999997616
+      y: -0.287000000477
+    xy_goal_tolerance: 0.3
+    yaw_goal_tolerance: 0.1
+- meta:
+    map: unused
+    node: WayPoint4
+    pointset: aims_map
+    published_at: 1970-01-01 00:05:11.410000+00:00
+    tag:
+    - outside_room_1
+    timestamp: 311410000000
+  node:
+    edges:
+    - action: move_base
+      edge_id: WayPoint4_WayPoint3
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint3
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint4_WayPoint9
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint9
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint4_WayPoint2
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint2
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint4_WayPoint1
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint1
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint4_WayPoint8
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint8
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    localise_by_topic: ''
+    map: unused
+    name: WayPoint4
+    pointset: aims_map
+    pose:
+      orientation:
+        w: 0.998571336269
+        x: 2.1574513287e-09
+        y: -7.54297957428e-09
+        z: -0.0534373112023
+      position:
+        x: 4.02903366089
+        y: 2.24620628357
+        z: 0.0
+    verts:
+    - x: 0.689999997616
+      y: 0.287000000477
+    - x: 0.287000000477
+      y: 0.689999997616
+    - x: -0.287000000477
+      y: 0.689999997616
+    - x: -0.689999997616
+      y: 0.287000000477
+    - x: -0.689999997616
+      y: -0.287000000477
+    - x: -0.287000000477
+      y: -0.689999997616
+    - x: 0.287000000477
+      y: -0.689999997616
+    - x: 0.689999997616
+      y: -0.287000000477
+    xy_goal_tolerance: 0.3
+    yaw_goal_tolerance: 0.1
+- meta:
+    map: unused
+    node: WayPoint5
+    pointset: aims_map
+    published_at: 1970-01-01 00:06:06.396000+00:00
+    tag:
+    - room_3
+    timestamp: 366396000000
+  node:
+    edges:
+    - action: move_base
+      edge_id: WayPoint5_WayPoint6
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint6
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint5_WayPoint1
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint1
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    localise_by_topic: ''
+    map: unused
+    name: WayPoint5
+    pointset: aims_map
+    pose:
+      orientation:
+        w: -0.38475343585
+        x: 5.7191588354e-08
+        y: 7.4880013301e-09
+        z: -0.92301940918
+      position:
+        x: 1.52375411987
+        y: 4.99981546402
+        z: 0.0
+    verts:
+    - x: 0.689999997616
+      y: 0.287000000477
+    - x: 0.287000000477
+      y: 0.689999997616
+    - x: -0.287000000477
+      y: 0.689999997616
+    - x: -0.689999997616
+      y: 0.287000000477
+    - x: -0.689999997616
+      y: -0.287000000477
+    - x: -0.287000000477
+      y: -0.689999997616
+    - x: 0.287000000477
+      y: -0.689999997616
+    - x: 0.689999997616
+      y: -0.287000000477
+    xy_goal_tolerance: 0.3
+    yaw_goal_tolerance: 0.1
+- meta:
+    map: unused
+    node: WayPoint6
+    pointset: aims_map
+    published_at: 1970-01-01 00:06:11.794000+00:00
+    tag:
+    - room_4
+    timestamp: 371794000000
+  node:
+    edges:
+    - action: move_base
+      edge_id: WayPoint6_WayPoint5
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint5
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint6_WayPoint3
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint3
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    localise_by_topic: ''
+    map: unused
+    name: WayPoint6
+    pointset: aims_map
+    pose:
+      orientation:
+        w: 0.890211760998
+        x: -2.87680066435e-08
+        y: -9.57099066667e-10
+        z: 0.455547183752
+      position:
+        x: 5.45640230179
+        y: 4.75082492828
+        z: 0.0
+    verts:
+    - x: 0.689999997616
+      y: 0.287000000477
+    - x: 0.287000000477
+      y: 0.689999997616
+    - x: -0.287000000477
+      y: 0.689999997616
+    - x: -0.689999997616
+      y: 0.287000000477
+    - x: -0.689999997616
+      y: -0.287000000477
+    - x: -0.287000000477
+      y: -0.689999997616
+    - x: 0.287000000477
+      y: -0.689999997616
+    - x: 0.689999997616
+      y: -0.287000000477
+    xy_goal_tolerance: 0.3
+    yaw_goal_tolerance: 0.1
+- meta:
+    map: unused
+    node: WayPoint7
+    pointset: aims_map
+    published_at: 1970-01-01 00:06:17.187000+00:00
+    tag:
+    - room_2
+    timestamp: 377187000000
+  node:
+    edges:
+    - action: move_base
+      edge_id: WayPoint7_WayPoint2
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint2
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    localise_by_topic: ''
+    map: unused
+    name: WayPoint7
+    pointset: aims_map
+    pose:
+      orientation:
+        w: 0.190846607089
+        x: 4.85597908551e-08
+        y: 2.77366165591e-08
+        z: -0.981619954109
+      position:
+        x: 1.42379188538
+        y: 2.06059885025
+        z: 0.0
+    verts:
+    - x: 0.689999997616
+      y: 0.287000000477
+    - x: 0.287000000477
+      y: 0.689999997616
+    - x: -0.287000000477
+      y: 0.689999997616
+    - x: -0.689999997616
+      y: 0.287000000477
+    - x: -0.689999997616
+      y: -0.287000000477
+    - x: -0.287000000477
+      y: -0.689999997616
+    - x: 0.287000000477
+      y: -0.689999997616
+    - x: 0.689999997616
+      y: -0.287000000477
+    xy_goal_tolerance: 0.3
+    yaw_goal_tolerance: 0.1
+- meta:
+    map: unused
+    node: WayPoint8
+    pointset: aims_map
+    published_at: 1970-01-01 00:06:24.247000+00:00
+    tag:
+    - room_1
+    timestamp: 384247000000
+  node:
+    edges:
+    - action: move_base
+      edge_id: WayPoint8_WayPoint4
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint4
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    localise_by_topic: ''
+    map: unused
+    name: WayPoint8
+    pointset: aims_map
+    pose:
+      orientation:
+        w: 0.991869747639
+        x: -6.47413322952e-09
+        y: -2.19880624819e-09
+        z: 0.127257347107
+      position:
+        x: 5.82696008682
+        y: 2.25551557541
+        z: 0.0
+    verts:
+    - x: 0.689999997616
+      y: 0.287000000477
+    - x: 0.287000000477
+      y: 0.689999997616
+    - x: -0.287000000477
+      y: 0.689999997616
+    - x: -0.689999997616
+      y: 0.287000000477
+    - x: -0.689999997616
+      y: -0.287000000477
+    - x: -0.287000000477
+      y: -0.689999997616
+    - x: 0.287000000477
+      y: -0.689999997616
+    - x: 0.689999997616
+      y: -0.287000000477
+    xy_goal_tolerance: 0.3
+    yaw_goal_tolerance: 0.1
+- meta:
+    map: unused
+    node: WayPoint9
+    pointset: aims_map
+    published_at: 1970-01-01 00:10:55.095000+00:00
+    tag:
+    - start
+    timestamp: 655095000000
+  node:
+    edges:
+    - action: move_base
+      edge_id: WayPoint9_WayPoint4
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint4
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    - action: move_base
+      edge_id: WayPoint9_WayPoint2
+      inflation_radius: 0.0
+      map_2d: unused
+      node: WayPoint2
+      recovery_behaviours_config: ''
+      top_vel: 0.55
+    localise_by_topic: ''
+    map: unused
+    name: WayPoint9
+    pointset: aims_map
+    pose:
+      orientation:
+        w: 0.6904104352
+        x: -4.76887080936e-08
+        y: -1.02328385765e-08
+        z: 0.72341811657
+      position:
+        x: 3.74632620811
+        y: 0.890265107155
+        z: 0.0
+    verts:
+    - x: 0.689999997616
+      y: 0.287000000477
+    - x: 0.287000000477
+      y: 0.689999997616
+    - x: -0.287000000477
+      y: 0.689999997616
+    - x: -0.689999997616
+      y: 0.287000000477
+    - x: -0.689999997616
+      y: -0.287000000477
+    - x: -0.287000000477
+      y: -0.689999997616
+    - x: 0.287000000477
+      y: -0.689999997616
+    - x: 0.689999997616
+      y: -0.287000000477
+    xy_goal_tolerance: 0.3
+    yaw_goal_tolerance: 0.1

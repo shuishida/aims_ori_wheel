@@ -1,0 +1,16 @@
+<launch>
+  <!--
+  NOTE: You'll need to bring up something that publishes sensor data (see
+  rosstage), something that publishes a map (see map_server), and something to
+  visualize a costmap (see nav_view), to see things work.
+
+  Also, on a real robot, you'd want to set the "use_sim_time" parameter to false, or just not set it.
+  -->
+
+  <node name="search" pkg="aims_navigation" type="search_room.py" output="screen"/>
+
+  <node name="navigate" pkg="aims_navigation" type="navigation.py" output="screen" />
+
+  <node name="pub_rviz_goals" pkg="aims_navigation" type="rviz_nav.py" />
+
+</launch>
