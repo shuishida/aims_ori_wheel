@@ -128,7 +128,7 @@ class PFLocaliser(PFLocaliserBase):
             p.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0,
                                                                      rand_yaw)  # Convert yaw angle into quaternion representation
 
-        p = [self.generate_gaussian_pose(initial_pose) for i in
+        p = [generate_gaussian_pose(initial_pose) for i in
              xrange(self.NUMBER_PARTICLES)]  # Must use PoseArray() instead?
         return p  # Return list of poses # NotImplementedError("initialise_particle_cloud not implemented!")
 
