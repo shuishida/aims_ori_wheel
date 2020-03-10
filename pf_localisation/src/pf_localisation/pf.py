@@ -122,7 +122,7 @@ class PFLocaliser(PFLocaliserBase):
             p.point.y = gauss(initial_pose.point.y, self.POSITION_STANDARD_DEVIATION)
             p.point.z = initial_pose
             initial_yaw = tf.transformations.euler_from_quaternion(initial_pose.orientation)[2] # Convert initial orientation from quaternion into euler representation and get yaw angle
-            rand_yaw = vonmises(initial_yaw, self.ORIENTATION_STANDARD_DEVIATION) # Generate random yaw angle
+            rand_yaw = vonmises(initial_yaw, 1.0 / self.ORIENTATION_STANDARD_DEVIATION**2) # Generate random yaw angle
             p.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0, rand_yaw) # Convert yaw angle into quaternion representation
         p = [self.generate_gaussian_pose(initial_pose) for i in xrange(self.NUMBER_PARTICLES)] # Must use PoseArray() instead?
         return p # Return list of poses # NotImplementedError("initialise_particle_cloud not implemented!")
@@ -153,11 +153,13 @@ class PFLocaliser(PFLocaliserBase):
             scan: The LaserScan message
         """
         # Samples (particles) are drawn from the original distribution
+        self.particlecloud.poses
         # The particles are driven through the nonlinear function
+        
         # Each particle is weighted with an importance factor that incorporates the knowledge of the measurement
-        w = [self.sensor_model.get_weight(scan, particle) for particle in self.particlecloud.poses] # Compute the likelihood weighting for each of a set of particles.
-        posterior = prior * likelihood
-        normalize(posterior)
+        likelihood = [self.sensor_model.get_weight(scan, particle) for particle in self.particlecloud.poses] # Compute the likelihood weighting for each of a set of particles.
+        # posterior = prior * likelihood
+        # normalize(posterior)
         # These important factors are used to choose a new set of particles that appropriately represents the a posteriori probability density function (resampling)
         
         # self.NUMBER_PREDICTED_READINGS 
