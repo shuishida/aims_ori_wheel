@@ -85,10 +85,10 @@ class PFLocaliser(PFLocaliserBase):
             (geometry_msgs.msg.Pose) the random pose on the map
         """
         p = Pose() # Instantiate pose
-        while not self.is_valid_position(p.point): # Repeat until unoccupied point is found
-            p.point.x = random() * self.occupancy_map.info.width # Sample x location on map
-            p.point.y = random() * self.occupancy_map.info.heigth # Sample y location on map
-        p.point.z = 0.0 # No elevation, z-coordinate is 0
+        while not self.is_valid_position(p.position): # Repeat until unoccupied point is found
+            p.position.x = random() * self.occupancy_map.info.width # Sample x location on map
+            p.position.y = random() * self.occupancy_map.info.heigth # Sample y location on map
+        p.position.z = 0.0 # No elevation, z-coordinate is 0
         p.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0, 2*math.pi*random()) # Random rotation around z-axis (vertical axis)
         return p # Return pose # NotImplementedError("generate_random_pose not implemented!")
 
@@ -118,9 +118,9 @@ class PFLocaliser(PFLocaliserBase):
         # 2nd approach
         def self.generate_gaussian_pose(self, initial_pose):
             p = Pose()
-            p.point.x = gauss(initial_pose.point.x, self.POSITION_STANDARD_DEVIATION)
-            p.point.y = gauss(initial_pose.point.y, self.POSITION_STANDARD_DEVIATION)
-            p.point.z = initial_pose
+            p.position.x = gauss(initial_pose.position.x, self.POSITION_STANDARD_DEVIATION)
+            p.position.y = gauss(initial_pose.position.y, self.POSITION_STANDARD_DEVIATION)
+            p.position.z = initial_pose
             initial_yaw = tf.transformations.euler_from_quaternion(initial_pose.orientation)[2] # Convert initial orientation from quaternion into euler representation and get yaw angle
             rand_yaw = vonmises(initial_yaw, 1.0 / self.ORIENTATION_STANDARD_DEVIATION**2) # Generate random yaw angle
             p.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0, rand_yaw) # Convert yaw angle into quaternion representation
@@ -152,18 +152,37 @@ class PFLocaliser(PFLocaliserBase):
         Args:
             scan: The LaserScan message
         """
+        std_pos_1 = 0.01 # Standard deviation of noise added to x- and y-coordinate at the beginning
+        std_yaw_1 = 1.0 / 180.0 * math.pi # Standard deviation of noise added to yaw angle at the beginning
+        std_pos_2 = 0.01 # Standard deviation of noise added to x- and y-coordinate at the end (after resampling)
+        std_yaw_2 = 1.0 / 180.0 * math.pi # Standard deviation of noise added to yaw angle at the end (after resampling)
         # Samples (particles) are drawn from the original distribution
-        self.particlecloud.poses
+        # Just use self.particlecloud.poses
+        # Add Gaussian noise
+        for p in self.particlecloud.poses: # Iterate over all poses
+            new_pose = Pose()
+            while not self.is_valid_position(new_pose.position): # Repeat until point is valid (unoccupied)
+                new_pose.position.x = gauss(p.position.x, std_pos_1) # Add noise to x-coordinate
+                new_pose.position.y = gauss(p.position.y, std_pos_1) # Add noise to y-coordinate
+            old_yaw = tf.transformations.euler_from_quaternion(p.orientation)[2] # Get yaw
+            new_yaw = old_yaw + vonmises(initial_yaw, 1.0 / std_yaw_1**2) # Add noise to yaw angle
+            new_pose.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0, new_yaw) # Orientation quaternion from yaw angle
+            p = new_pose
         # The particles are driven through the nonlinear function
-        
         # Each particle is weighted with an importance factor that incorporates the knowledge of the measurement
         likelihood = [self.sensor_model.get_weight(scan, particle) for particle in self.particlecloud.poses] # Compute the likelihood weighting for each of a set of particles.
+        
         # posterior = prior * likelihood
         # normalize(posterior)
         # These important factors are used to choose a new set of particles that appropriately represents the a posteriori probability density function (resampling)
         
+        renormalize likelihood
+        
+        sample from distribution
+        
         # self.NUMBER_PREDICTED_READINGS 
-        self.particlecloud.poses = 
+        self.particlecloud.poses = self.particlecloud.poses + noise
+        
         return # NotImplementedError("update_particle_cloud not implemented!")
 
 
@@ -184,7 +203,7 @@ class PFLocaliser(PFLocaliserBase):
             pose: The estimated pose (should be a geometry_msgs.Pose message)
         """
         estimate = Pose() # Instantiate pose estimate
-        estimate.point = np.mean(self.particlecloud.poses.point) # Average points (position)
+        estimate.position = np.mean(self.particlecloud.poses.position) # Average points (position)
         def avg_quaternion(self, Q):
         """ Q is an Mx4 matrix of quaternions. Q_avg is the average quaternion.
         Based on
