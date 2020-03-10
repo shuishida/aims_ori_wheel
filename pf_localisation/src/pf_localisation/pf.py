@@ -156,23 +156,30 @@ class PFLocaliser(PFLocaliserBase):
         Args:
             scan: The LaserScan message
         """
+
+        def add_noise(std_pos, std_yaw):
+            poses = []
+            for p in self.particlecloud.poses:  # Iterate over all poses
+                new_pose = Pose()
+                while not self.is_valid_position(new_pose.position):  # Repeat until point is valid (unoccupied)
+                    new_pose.position.x = gauss(p.position.x, std_pos)  # Add noise to x-coordinate
+                    new_pose.position.y = gauss(p.position.y, std_pos)  # Add noise to y-coordinate
+                old_yaw = tf.transformations.euler_from_quaternion(p.orientation)[2]  # Get yaw
+                new_yaw = old_yaw + vonmises(old_yaw, 1.0 / std_yaw ** 2)  # Add noise to yaw angle
+                new_pose.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0,
+                                                                                new_yaw)  # Orientation quaternion from yaw angle
+                poses.append(new_pose)
+            self.particlecloud.poses = poses
+
         std_pos_1 = 0.01  # Standard deviation of noise added to x- and y-coordinate at the beginning
         std_yaw_1 = 1.0 / 180.0 * math.pi  # Standard deviation of noise added to yaw angle at the beginning
         std_pos_2 = 0.01  # Standard deviation of noise added to x- and y-coordinate at the end (after resampling)
         std_yaw_2 = 1.0 / 180.0 * math.pi  # Standard deviation of noise added to yaw angle at the end (after resampling)
         # Samples (particles) are drawn from the original distribution
         # Just use self.particlecloud.poses
+
         # Add Gaussian noise
-        for p in self.particlecloud.poses:  # Iterate over all poses
-            new_pose = Pose()
-            while not self.is_valid_position(new_pose.position):  # Repeat until point is valid (unoccupied)
-                new_pose.position.x = gauss(p.position.x, std_pos_1)  # Add noise to x-coordinate
-                new_pose.position.y = gauss(p.position.y, std_pos_1)  # Add noise to y-coordinate
-            old_yaw = tf.transformations.euler_from_quaternion(p.orientation)[2]  # Get yaw
-            new_yaw = old_yaw + vonmises(old_yaw, 1.0 / std_yaw_1 ** 2)  # Add noise to yaw angle
-            new_pose.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0,
-                                                                            new_yaw)  # Orientation quaternion from yaw angle
-            p = new_pose
+        add_noise(std_pos=std_pos_1, std_yaw=std_yaw_1)
         # The particles are driven through the nonlinear function
         # Each particle is weighted with an importance factor that incorporates the knowledge of the measurement
         likelihood = np.array([self.sensor_model.get_weight(scan, particle) for particle in
@@ -209,17 +216,7 @@ class PFLocaliser(PFLocaliserBase):
         # self.NUMBER_PREDICTED_READINGS
 
         # Add Gaussian noise
-        for p in self.particlecloud.poses:  # Iterate over all poses
-            new_pose = Pose()
-            while not self.is_valid_position(new_pose.position):  # Repeat until point is valid (unoccupied)
-                new_pose.position.x = gauss(p.position.x, std_pos_2)  # Add noise to x-coordinate
-                new_pose.position.y = gauss(p.position.y, std_pos_2)  # Add noise to y-coordinate
-            old_yaw = tf.transformations.euler_from_quaternion(p.orientation)[2]  # Get yaw
-            new_yaw = old_yaw + vonmises(old_yaw, 1.0 / std_yaw_2 ** 2)  # Add noise to yaw angle
-            new_pose.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0,
-                                                                            new_yaw)  # Orientation quaternion from yaw angle
-            p = new_pose
-        return  # NotImplementedError("update_particle_cloud not implemented!")
+        add_noise(std_pos=std_pos_2, std_yaw=std_yaw_2)
 
     def estimate_pose(self):
         """ Create new estimated pose, given particle cloud.
