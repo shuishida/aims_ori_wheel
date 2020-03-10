@@ -169,7 +169,7 @@ class PFLocaliser(PFLocaliserBase):
                 new_pose.position.x = gauss(p.position.x, std_pos_1)  # Add noise to x-coordinate
                 new_pose.position.y = gauss(p.position.y, std_pos_1)  # Add noise to y-coordinate
             old_yaw = tf.transformations.euler_from_quaternion(p.orientation)[2]  # Get yaw
-            new_yaw = old_yaw + vonmises(initial_yaw, 1.0 / std_yaw_1 ** 2)  # Add noise to yaw angle
+            new_yaw = old_yaw + vonmises(old_yaw, 1.0 / std_yaw_1 ** 2)  # Add noise to yaw angle
             new_pose.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0,
                                                                             new_yaw)  # Orientation quaternion from yaw angle
             p = new_pose
@@ -215,7 +215,7 @@ class PFLocaliser(PFLocaliserBase):
                 new_pose.position.x = gauss(p.position.x, std_pos_2)  # Add noise to x-coordinate
                 new_pose.position.y = gauss(p.position.y, std_pos_2)  # Add noise to y-coordinate
             old_yaw = tf.transformations.euler_from_quaternion(p.orientation)[2]  # Get yaw
-            new_yaw = old_yaw + vonmises(initial_yaw, 1.0 / std_yaw_2 ** 2)  # Add noise to yaw angle
+            new_yaw = old_yaw + vonmises(old_yaw, 1.0 / std_yaw_2 ** 2)  # Add noise to yaw angle
             new_pose.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0,
                                                                             new_yaw)  # Orientation quaternion from yaw angle
             p = new_pose
