@@ -4,7 +4,9 @@ from std_msgs.msg import Bool
 from sensor_msgs.msg import Joy
 from geometry_msgs.msg import Twist
 from potential_flow import get_grads
+from sensor_msgs.msg import LaserScan
 import numpy as np
+
 
 class APFController(object):
     """ class to implement safety controller by overriding the velocities
@@ -33,8 +35,7 @@ class APFController(object):
         self.x_button = data.buttons[0]
 
     def get_grads(self, msg):
-        force = get_grads(msg.ranges, msg.angle_min, msg.angle_max, k=10, thresh=0.3, ignore_thresh=0.005):
-
+        force = get_grads(msg.ranges, msg.angle_min, msg.angle_max, k=10, thresh=0.3, ignore_thresh=0.005)
 
     def override_control(self, obstacle_detected):
         """ Function to override the control given by the PS4 controller. If the
@@ -51,7 +52,6 @@ class APFController(object):
         # velocity.
         if self.x_button != 1:
             return
-
 
         rospy.loginfo(obstacle_detected.data)
         if obstacle_detected.data:
