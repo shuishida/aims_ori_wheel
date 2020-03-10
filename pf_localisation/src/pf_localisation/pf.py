@@ -21,15 +21,15 @@ from random import random, randrange, gauss, shuffle
 import time
 
 
-#
-# def orientation_to_vec(orientation):
-#     return [getattr(orientation, k) for k in ['x', 'y', 'z', 'w']]
-#
-#
-# def vec_to_orientation(vec):
-#     o = Quaternion()
-#     o.x, o.y, o.z, o.w = vec
-#     return o
+
+def orientation_to_vec(orientation):
+    return [getattr(orientation, k) for k in ['x', 'y', 'z', 'w']]
+
+
+def vec_to_orientation(vec):
+    o = Quaternion()
+    o.x, o.y, o.z, o.w = vec
+    return o
 
 
 class PFLocaliser(PFLocaliserBase):
@@ -42,8 +42,8 @@ class PFLocaliser(PFLocaliserBase):
 
         # NOTE: Changing these values will effect the performance!
         # Set motion model parameters
-        self.ODOM_ROTATION_NOISE = 0.00006081294  # Odometry model rotation noise
-        self.ODOM_TRANSLATION_NOISE = 0.00007881588  # Odometry x axis (fwd) noise
+        self.ODOM_ROTATION_NOISE = 0.00006081294        # Odometry model rotation noise
+        self.ODOM_TRANSLATION_NOISE = 0.00007881588     # Odometry x axis (fwd) noise
         self.ODOM_DRIFT_NOISE = 0.0003284  # Odometry y axis (side-side) noise
 
         # Sensor model parameters
@@ -193,9 +193,9 @@ class PFLocaliser(PFLocaliserBase):
                 poses.append(new_pose)
             self.particlecloud.poses = poses
 
-        std_pos_1 = 0.01  # Standard deviation of noise added to x- and y-coordinate at the beginning
+        std_pos_1 = 0.1  # Standard deviation of noise added to x- and y-coordinate at the beginning
         std_yaw_1 = 1.0 / 180.0 * math.pi  # Standard deviation of noise added to yaw angle at the beginning
-        std_pos_2 = 0.01  # Standard deviation of noise added to x- and y-coordinate at the end (after resampling)
+        std_pos_2 = 0.1  # Standard deviation of noise added to x- and y-coordinate at the end (after resampling)
         std_yaw_2 = 1.0 / 180.0 * math.pi  # Standard deviation of noise added to yaw angle at the end (after resampling)
         # Samples (particles) are drawn from the original distribution
         # Just use self.particlecloud.poses
@@ -249,28 +249,32 @@ class PFLocaliser(PFLocaliserBase):
             pose: The estimated pose (should be a geometry_msgs.Pose message)
         """
         estimate = Pose()  # Instantiate pose estimate
-        estimate.position = np.mean(self.particlecloud.poses.position)  # Average points (position)
+        # estimate.position = np.mean([pose.position for pose in self.particlecloud.poses])  # Average points (position)
 
-        def avg_quaternion(Q):
+        for k in ['x', 'y', 'z']:
+            mean = np.mean([getattr(pose.position, k) for pose in self.particlecloud.poses])
+            setattr(estimate.position, k, mean)
+
+        def avg_quaternion(poses):
             """ Q is     an Mx4 matrix of quaternions. Q_avg is the average quaternion.
             Based on
             Markley, F. Landis, Yang Cheng, John Lucas Crassidis, and Yaakov Oshman.
             "Averaging quaternions." Journal of Guidance, Control, and Dynamics 30,
             no. 4 (2007): 1193-1197.
             """
+            Q = [np.array(orientation_to_vec(pose.orientation)) for pose in poses]
             A = np.zeros((4, 4))  # Form symmetric accumulator matrix
-            M = Q.shape[0]
-            for i in range(M):
-                q = Q[i, :]
+            M = len(Q)
+            for q in Q:
                 if q[0] < 0:  # Handle antipodal configuration
                     q = -q
                 A = np.outer(q, q) + A  # Rank 1 update
             A = (1.0 / M) * A  # Scale
             # Get eigenvector corresponding to largest eigenvalue # [Qavg, Eval] = eigs(A,1)
             vals, vects = np.linalg.eig(A)
-            maxcol = list(vals).index(max(vals))
+            maxcol = vals.argmax()
             Q_avg = vects[:, maxcol]
             return vec_to_orientation(Q_avg)
 
-        estimate.orientation = avg_quaternion(self.particlecloud.poses.orientation)  # Average quaternions (orientation)
+        estimate.orientation = avg_quaternion(self.particlecloud.poses)  # Average quaternions (orientation)
         return estimate  # NotImplementedError("estimate_pose not implemented!")
