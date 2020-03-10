@@ -171,15 +171,37 @@ class PFLocaliser(PFLocaliserBase):
         # The particles are driven through the nonlinear function
         # Each particle is weighted with an importance factor that incorporates the knowledge of the measurement
         likelihood = [self.sensor_model.get_weight(scan, particle) for particle in self.particlecloud.poses] # Compute the likelihood weighting for each of a set of particles.
-        w = likelihood / sum(liklihood) # Normalise weights
+        w = likelihood / sum(likelihood) # Normalise weights
         # posterior = prior * likelihood
         # normalize(posterior)
         # These important factors are used to choose a new set of particles that appropriately represents the a posteriori probability density function (resampling)
         
         
-        sample from distribution
+        # sample from distribution
         
-        self.particlecloud.poses
+        
+        # def resample(weights):
+
+        # n = len(weights)
+
+        #indices = []
+
+        #C = [0.0] + [np.sum(weights[: i + 1]) for i in xrange(self.NUMBER_PARTICLES)]
+
+        #u0, j = np.random.random(), 0
+
+        #for u in [(u0 + i) / n for i in range(n)]:
+
+         #   while u > C[j]:
+
+          #      j += 1
+
+           # indices.append(j - 1)
+
+        #return indices
+        
+        
+        self.particlecloud.poses = np.random.choice(self.particlecloud.poses ,w)
         
         # self.NUMBER_PREDICTED_READINGS
         
