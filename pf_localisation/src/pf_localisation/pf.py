@@ -21,6 +21,16 @@ from random import random, randrange, gauss, shuffle
 import time
 
 
+def orientation_to_vec(orientation):
+    return [getattr(orientation, k) for k in ['x', 'y', 'z', 'w']]
+
+
+def vec_to_orientation(vec):
+    o = Quaternion()
+    o.x, o.y, o.z, o.w = vec
+    return o
+
+
 class PFLocaliser(PFLocaliserBase):
     """ Subclass of PFLocaliserBase, implement all un-implemented functions! """
 
@@ -86,10 +96,11 @@ class PFLocaliser(PFLocaliserBase):
         p = Pose()  # Instantiate pose
         while not self.is_valid_position(p.position):  # Repeat until unoccupied point is found
             p.position.x = random() * self.occupancy_map.info.width  # Sample x location on map
-            p.position.y = random() * self.occupancy_map.info.heigth  # Sample y location on map
+            p.position.y = random() * self.occupancy_map.info.height  # Sample y location on map
         p.position.z = 0.0  # No elevation, z-coordinate is 0
-        p.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0,
-                                                                 2 * math.pi * random())  # Random rotation around z-axis (vertical axis)
+        vector = tf.transformations.quaternion_from_euler(0.0, 0.0,
+                                                          2 * math.pi * random())  # Random rotation around z-axis (vertical axis)
+        p.orientation = vec_to_orientation(vector)
         return p  # Return pose # NotImplementedError("generate_random_pose not implemented!")
 
     def initialise_particle_cloud(self, initial_pose):
@@ -120,19 +131,26 @@ class PFLocaliser(PFLocaliserBase):
             p = Pose()
             p.position.x = gauss(initial_pose.pose.pose.position.x, self.POSITION_STANDARD_DEVIATION)
             p.position.y = gauss(initial_pose.pose.pose.position.y, self.POSITION_STANDARD_DEVIATION)
-            p.position.z = initial_pose.pose.pose
-            initial_yaw = tf.transformations.euler_from_quaternion(initial_pose.pose.pose.orientation)[
-                2]  # Convert initial orientation from quaternion into euler representation and get yaw angle
-            rand_yaw = vonmises(initial_yaw,
-                                1.0 / self.ORIENTATION_STANDARD_DEVIATION ** 2)  # Generate random yaw angle
-            p.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0,
-                                                                     rand_yaw)  # Convert yaw angle into quaternion representation
+            p.position.z = 0.0
 
-        p = [generate_gaussian_pose(initial_pose) for i in
-             xrange(self.NUMBER_PARTICLES)]  # Must use PoseArray() instead?
-        
+            # Convert initial orientation from quaternion into euler representation and get yaw angle
+
+            # initial_yaw = tf.transformations.euler_from_quaternion(orientation_to_vec(initial_pose.pose.pose.orientation))[2]
+            # rand_yaw = vonmises(initial_yaw, 1.0 / self.ORIENTATION_STANDARD_DEVIATION ** 2)  # Generate random yaw angle
+            # vector = tf.transformations.quaternion_from_euler(0.0, 0.0, rand_yaw)  # Convert yaw angle into quaternion representation
+            # p.orientation = vec_to_orientation(vector)
+
+            heading = getHeading(initial_pose.pose.pose.orientation)
+            rotate_amounts = vonmises(heading, self.ORIENTATION_STANDARD_DEVIATION) - heading
+            p.orientation = rotateQuaternion(initial_pose.pose.pose.orientation, rotate_amounts)
+
+            return p
+
+        poses = [generate_gaussian_pose(initial_pose) for i in xrange(self.NUMBER_PARTICLES)]
+
         p_arr = PoseArray()
-        [p_arr.poses.append(pose) for pose in p] # Convert list to PoseArray
+        for pose in poses:
+            p_arr.poses.append(pose)  # Convert list to PoseArray
         return p_arr  # Return list of poses # NotImplementedError("initialise_particle_cloud not implemented!")
 
     def update_particle_cloud(self, scan):
@@ -167,10 +185,11 @@ class PFLocaliser(PFLocaliserBase):
                 while not self.is_valid_position(new_pose.position):  # Repeat until point is valid (unoccupied)
                     new_pose.position.x = gauss(p.position.x, std_pos)  # Add noise to x-coordinate
                     new_pose.position.y = gauss(p.position.y, std_pos)  # Add noise to y-coordinate
-                old_yaw = tf.transformations.euler_from_quaternion(p.orientation)[2]  # Get yaw
+                old_yaw = tf.transformations.euler_from_quaternion(orientation_to_vec(p.orientation))[2]  # Get yaw
                 new_yaw = old_yaw + vonmises(old_yaw, 1.0 / std_yaw ** 2)  # Add noise to yaw angle
-                new_pose.orientation = tf.transformations.quaternion_from_euler(0.0, 0.0,
-                                                                                new_yaw)  # Orientation quaternion from yaw angle
+                vector = tf.transformations.quaternion_from_euler(0.0, 0.0,
+                                                                  new_yaw)  # Orientation quaternion from yaw angle
+                new_pose.orientation = vec_to_orientation(vector)
                 poses.append(new_pose)
             self.particlecloud.poses = poses
 
@@ -259,8 +278,7 @@ class PFLocaliser(PFLocaliserBase):
             vals, vects = np.linalg.eig(A)
             maxcol = list(vals).index(max(vals))
             Q_avg = vects[:, maxcol]
-            return Q_avg
+            return vec_to_orientation(Q_avg)
 
-        estimate.orientation = avg_quaternion(
-            self.particlecloud.poses.orientation)  # Average quaternions (orientation)
+        estimate.orientation = avg_quaternion(self.particlecloud.poses.orientation)  # Average quaternions (orientation)
         return estimate  # NotImplementedError("estimate_pose not implemented!")
