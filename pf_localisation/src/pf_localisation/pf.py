@@ -118,10 +118,10 @@ class PFLocaliser(PFLocaliserBase):
         # 2nd approach
         def generate_gaussian_pose(initial_pose):
             p = Pose()
-            p.position.x = gauss(initial_pose.position.x, self.POSITION_STANDARD_DEVIATION)
-            p.position.y = gauss(initial_pose.position.y, self.POSITION_STANDARD_DEVIATION)
-            p.position.z = initial_pose
-            initial_yaw = tf.transformations.euler_from_quaternion(initial_pose.orientation)[
+            p.position.x = gauss(initial_pose.pose.pose.position.x, self.POSITION_STANDARD_DEVIATION)
+            p.position.y = gauss(initial_pose.pose.pose.position.y, self.POSITION_STANDARD_DEVIATION)
+            p.position.z = initial_pose.pose.pose
+            initial_yaw = tf.transformations.euler_from_quaternion(initial_pose.pose.pose.orientation)[
                 2]  # Convert initial orientation from quaternion into euler representation and get yaw angle
             rand_yaw = vonmises(initial_yaw,
                                 1.0 / self.ORIENTATION_STANDARD_DEVIATION ** 2)  # Generate random yaw angle
@@ -132,7 +132,7 @@ class PFLocaliser(PFLocaliserBase):
              xrange(self.NUMBER_PARTICLES)]  # Must use PoseArray() instead?
         
         p_arr = PoseArray()
-        [p_arr.append(pose) for pose in p] # Convert list to PoseArray
+        [p_arr.poses.append(pose) for pose in p] # Convert list to PoseArray
         return p_arr  # Return list of poses # NotImplementedError("initialise_particle_cloud not implemented!")
 
     def update_particle_cloud(self, scan):
