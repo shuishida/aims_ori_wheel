@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from copy import deepcopy
 import math
 import numpy as np
 
@@ -15,6 +16,13 @@ def _sample_from_distribution(dict):
     return np.random.choice(keys, p=probs)
 
 
+def _ucb_selection_policy(mcts_decision_node, epsilon=0.2):
+    if np.random.random() <= epsilon:
+        return np.random.choice(mcts_decision_node.enabled_actions)
+    else:
+        return _ucb_selection_policy(mcts_decision_node)
+
+
 def ucb_selection_policy(mcts_decision_node):
     """
     TODO: your code here
@@ -23,26 +31,30 @@ def ucb_selection_policy(mcts_decision_node):
     decision node.
     """
 
-    C = 1.0 # Parameter
-    action_set = mcts_decision_node.enabled_actions # All possible actions
+    C = max(10, abs(mcts_decision_node.value)) # 1000.0 # Parameter
+    # C = 1.0
+    action_set = deepcopy(mcts_decision_node.enabled_actions) # All possible actions
+    np.random.shuffle(action_set)
 
     for current_action in action_set:
         if current_action not in mcts_decision_node.children.keys():
             return current_action
 
     n_s = mcts_decision_node.observations # The number of times that this node has been visited
-    best_action = float('NaN')
-    best_value = float('Inf')    
+    best_action = 'NaN'
+    best_value = float('Inf')
     for current_action in action_set:
         current_chance_node = mcts_decision_node.children[current_action] # Chance nodes - correspond to state-action pairs and are used to keep estimate of Q(s,a)
         Q_hat = current_chance_node.value # The current estimate of the value at this node.
         n_s_a = current_chance_node.observations # The number of times that this node has been visited
         current_value = Q_hat - C * np.sqrt(np.log(n_s)/n_s_a)
-        if current_value <= best_value:
+        # print(current_value)
+        if current_value < best_value:
             best_value = current_value
             best_action = current_action
-    if math.isnan(best_action):
+    if best_action is 'NaN':
         raise("No best action available.")
+    # print("%s %s Number of available actions: %s" % (best_action, best_value, len(action_set)))
     return best_action
 
 def random_rollout_policy(state, enabled_actions):
