@@ -82,7 +82,8 @@ class MCTSChanceNode(object):
             sampled_return: A return (the sum of costs from the state-action
                 pair for this chance node) sampled from this node by MCTS
         """
-        raise NotImplementedError("Your code here")
+        self.observations += 1
+        self.value += (sampled_return - self.value) / self.observations
 
     def pretty_print(self, depth, num_tabs=0, new_lines=False):
         """
