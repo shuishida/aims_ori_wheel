@@ -21,7 +21,20 @@ def ucb_selection_policy(mcts_decision_node):
     Your code needs to return a valid action that can be taken from this 
     decision node.
     """
-    raise NotImplementedError("Your code here")
+    C = 1.0 # Parameter
+    action_set = mcts_decision_node.enabled_actions # All possible actions
+    n_s = mcts_decision_node.observations # The number of times that this node has been visited    
+    best_action = float('NaN')
+    best_value = float('Inf')    
+    for current_action in action_set:
+        current_chance_node = mcts_decision_node.children[current_action] # Chance nodes - correspond to state-action pairs and are used to keep estimate of Q(s,a)
+        Q_hat = current_chance_node.value # The current estimate of the value at this node.
+        n_s_a = current_chance_node.observations # The number of times that this node has been visited
+        current_value = Q_hat - C * np.sqrt(np.log(n_s)/n_s_a)
+        if current_value <= best_value:
+            best_value = current_value
+            best_action = current_action
+    return best_action
 
 def random_rollout_policy(state, enabled_actions):
     """
@@ -29,7 +42,7 @@ def random_rollout_policy(state, enabled_actions):
 
     Your code needs to return a valid action from this state.
     """
-    raise NotImplementedError("Your code here")
+    return np.random.choice(enabled_actions)
 
 
 
