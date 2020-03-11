@@ -537,29 +537,35 @@ def __make_check_for_person_transitions(room_info, state_factors, node_to_loc_sv
     The action name for these ProbTransition objects must be "check_for_person"
     """
 
-    search_person_action_name = "check_for_person"
+    check_person_action_name = "check_for_person"
 
     transitions = []
+    time_cost = CHECK_FOR_PERSON_TIME_COST
 
     for doorway_edge, person_factor, rubble_factor in room_info:
-        time_cost = math.ceil(doorway_edge.length()*EDGE_TIME_COST_TO_LEN_RATIO)
         # moving into room
-        check_person_prob_preconds = \
-            ConjunctionCondition(
-                EqualityCondition(state_factors['location'], node_to_loc_sv[doorway_edge.n1]),
-                EqualityCondition(rubble_factor, 'cleared'),
-            )
-        check_person_prob_postconds = {
-            ConjunctionCondition(
-                EqualityCondition(state_factors['location'], node_to_loc_sv[doorway_edge.n2]),
-                CumulativeCondition(state_factors['time'], time_cost)):
-                    1.0
-        }
-        check_person_transition = ProbTransition(
-            pre_cond=check_person_prob_preconds,
-            action_name=search_person_action_name,
-            prob_post_conds=check_person_prob_postconds)
-        transitions.append(check_person_transition)
+        person_found_prob =
+
+        for person_state in ('missing', 'found'):
+            check_person_preconds = \
+                ConjunctionCondition(
+                    EqualityCondition(state_factors['location'], node_to_loc_sv[doorway_edge.n2]),
+                    EqualityCondition(person_factor, person_state)
+                )
+            check_person_postconds = {
+                ConjunctionCondition(
+                    CumulativeCondition(state_factors['num_rooms_searched'], 1.0),
+                    CumulativeCondition(state_factors['num_people_found'], 1.0),
+                    CumulativeCondition(state_factors['time'], time_cost)
+
+                ): person_found_prob if person_state is 'found' else 1.0 - person_found_prob
+            }
+
+            check_person_transition = ProbTransition(
+                pre_cond=check_person_preconds,
+                action_name=check_person_action_name,
+                prob_post_conds=check_person_postconds)
+            transitions.append(check_person_transition)
 
     return transitions
 
@@ -598,7 +604,7 @@ def make_check_for_person_transitions(room_info, state_factors, node_to_loc_sv):
     for doorway_edge, person_factor, rubble_factor in room_info:
         
         time_cost = CHECK_FOR_PERSON_TIME_COST
-        
+
         search_person_precond = # Must be in room
         
         search_person_prob_postconds = {
