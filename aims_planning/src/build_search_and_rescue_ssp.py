@@ -262,6 +262,7 @@ def make_search_and_rescue_state_factors(topological_edges):
 
     # State factors
     # for room i, location 2i is inside and 2i-1 is outside the door
+    # 0: initial state
     # -1 is used for the home location when finished
     loc_factor = IntegerStateFactor(name='location', min=-1, max=8)
     person_counter_factor = IntegerStateFactor(name='num_people_found', min=0, max=4)
@@ -503,6 +504,62 @@ def make_doorway_transitions(room_info, state_factors, node_to_loc_sv):
             action_name=backward_action_name,
             prob_post_conds=backward_prob_postconds)
         transitions.append(backward_transition)
+
+    return transitions
+
+
+def __make_check_for_person_transitions(room_info, state_factors, node_to_loc_sv):
+    """
+    Makes transitions related to searching rooms for people.
+
+    Args:
+        room_info: A list of tuples (doorway_edge, person_factor, rubble_factor)
+            where 'doorway_edge' is an edge that may be blocked by rubble,
+            'person_factor' corresponds to a state factor 'room_i_person' for
+            some i and similarly 'rubble_factor' corresponds to a state factor
+            'room_i_rubble'
+        state_factors: A dictionary mapping from state factor names to state
+            factor objects
+        node_to_loc_sv: A dictionary mapping from N objects to values for the
+            'location' state factor.
+
+    Returns:
+        A list of ProbTransition objects for transitions related to searching
+        for people
+    """
+
+    """
+    YOUR CODE HERE
+    You should create ProbTransition objects to update each of the 
+    'person_factor's, and the 'num_people_found' and 'num_rooms_searched' 
+    factors for when each of the rooms are searched.
+
+    The action name for these ProbTransition objects must be "check_for_person"
+    """
+
+    search_person_action_name = "check_for_person"
+
+    transitions = []
+
+    for doorway_edge, person_factor, rubble_factor in room_info:
+        time_cost = math.ceil(doorway_edge.length()*EDGE_TIME_COST_TO_LEN_RATIO)
+        # moving into room
+        check_person_prob_preconds = \
+            ConjunctionCondition(
+                EqualityCondition(state_factors['location'], node_to_loc_sv[doorway_edge.n1]),
+                EqualityCondition(rubble_factor, 'cleared'),
+            )
+        check_person_prob_postconds = {
+            ConjunctionCondition(
+                EqualityCondition(state_factors['location'], node_to_loc_sv[doorway_edge.n2]),
+                CumulativeCondition(state_factors['time'], time_cost)):
+                    1.0
+        }
+        check_person_transition = ProbTransition(
+            pre_cond=check_person_prob_preconds,
+            action_name=search_person_action_name,
+            prob_post_conds=check_person_prob_postconds)
+        transitions.append(check_person_transition)
 
     return transitions
 
