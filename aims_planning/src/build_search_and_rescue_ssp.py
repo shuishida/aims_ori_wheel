@@ -553,8 +553,6 @@ def make_check_for_person_transitions(room_info, state_factors, node_to_loc_sv):
         transitions.append(search_person_transition)
     
     return transitions
-    # search_person_action_name = "check_for_person"
-    # raise NotImplementedError("Your code here")
 
 
 
