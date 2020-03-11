@@ -548,12 +548,38 @@ def make_check_for_person_transitions(room_info, state_factors, node_to_loc_sv):
                 
                 if num_people_found <= num_rooms_searched:
                 
-                    unknown_precond = 
-                        ConjunctionCondition(
-                            EqualityCondition(state_factors['location'], node_to_loc_sv[doorway_edge.n2]),
-                            EqualityCondition(person_factor, 'unknown')
-                        )
+                    if num_rooms_searched < 4.0:
                     
+                        unknown_precond = 
+                            ConjunctionCondition(
+                                EqualityCondition(state_factors['location'], node_to_loc_sv[doorway_edge.n2]),
+                                EqualityCondition(person_factor, 'unknown')
+                            )
+                    
+                        person_found_prob = (NUM_PEOPLE - num_people_found) / (4.0 - num_rooms_searched)
+                        # person_found_prob = min(person_found_prob, 1.0)
+                        # person_found_prob = max(0.0, person_found_prob)
+                        
+                        unknown_postconds = {
+                            ConjunctionCondition(
+                                CumulativeCondition(state_factors['num_people_found'], 1.0),
+                                CumulativeCondition(state_factors['num_rooms_searched'], 1.0),
+                                EqualityCondition(person_factor, 'found'),
+                                CumulativeCondition(state_factors['time'], time_cost)):
+                                    person_found_prob,
+                            ConjunctionCondition(
+                                CumulativeCondition(state_factors['num_rooms_searched'], 1.0),
+                                EqualityCondition(person_factor, 'missing'),
+                                CumulativeCondition(state_factors['time'], time_cost)):
+                                    1.0 - person_found_prob
+                        }
+                        
+                        unknown_transition = ProbTransition(
+                        pre_cond=unknown_precond,
+                        action_name=search_person_action_name,
+                        prob_post_conds=unknown_postconds)
+                        transitions.append(unknown_transition)
+                        
                     missing_precond = 
                         ConjunctionCondition(
                             EqualityCondition(state_factors['location'], node_to_loc_sv[doorway_edge.n2]),
@@ -566,24 +592,6 @@ def make_check_for_person_transitions(room_info, state_factors, node_to_loc_sv):
                             EqualityCondition(person_factor, 'found')
                         )
                     
-                    person_found_prob = (NUM_PEOPLE - num_people_found) / (4.0 - num_rooms_searched)
-                    person_found_prob = min(person_found_prob, 1.0)
-                    person_found_prob = max(0.0, person_found_prob)
-                    
-                    unknown_postconds = {
-                        ConjunctionCondition(
-                            CumulativeCondition(state_factors['num_people_found'], 1.0),
-                            CumulativeCondition(state_factors['num_rooms_searched'], 1.0),
-                            EqualityCondition(person_factor, 'found'),
-                            CumulativeCondition(state_factors['time'], time_cost)):
-                                person_found_prob,
-                        ConjunctionCondition(
-                            CumulativeCondition(state_factors['num_rooms_searched'], 1.0),
-                            EqualityCondition(person_factor, 'missing'),
-                            CumulativeCondition(state_factors['time'], time_cost)):
-                                1.0 - person_found_prob
-                    }
-                    
                     missing_postconds = {
                         ConjunctionCondition(
                             CumulativeCondition(state_factors['time'], time_cost)):
@@ -595,12 +603,6 @@ def make_check_for_person_transitions(room_info, state_factors, node_to_loc_sv):
                             CumulativeCondition(state_factors['time'], time_cost)):
                                 1.0
                     }
-                    
-                    unknown_transition = ProbTransition(
-                        pre_cond=unknown_precond,
-                        action_name=search_person_action_name,
-                        prob_post_conds=unknown_postconds)
-                    transitions.append(unknown_transition)
                     
                     missing_transition = ProbTransition(
                         pre_cond=missing_precond,
