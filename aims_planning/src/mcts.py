@@ -10,8 +10,9 @@ from mcts_chance_node import MCTSChanceNode
 from stringbuilder import StringBuilder
 
 
-
-
+def _sample_from_distribution(dict):
+    keys, probs = zip(*dict.items())
+    return np.random.choice(keys, p=probs)
 
 
 def ucb_selection_policy(mcts_decision_node):
