@@ -34,6 +34,8 @@ def ucb_selection_policy(mcts_decision_node):
         if current_value <= best_value:
             best_value = current_value
             best_action = current_action
+    if math.isnan(best_action):
+        raise("No best action available.")
     return best_action
 
 def random_rollout_policy(state, enabled_actions):
