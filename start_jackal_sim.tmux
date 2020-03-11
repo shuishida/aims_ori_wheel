@@ -41,7 +41,7 @@ tmux send-keys "roslaunch --wait topological_navigation topological_map_viz_only
 tmux selectp -t 1
 tmux send-keys  "sleep 10" C-m
 tmux send-keys "roslaunch --wait aims_navigation map.launch" C-m
-
+heigth
 tmux select-window -t $SESSION:4
 [ -f $DEVELOPMENT_WS ] && `$_SRC_ENV`
 tmux send-keys "roslaunch --wait pf_localisation particle_filter.launch" C-m
@@ -56,7 +56,7 @@ tmux send-keys "roslaunch --wait aims_planning planner.launch"
 
 tmux select-window -t $SESSION:7
 [ -f $DEVELOPMENT_WS ] && `$_SRC_ENV`
-tmux send-keys "rviz -d $DEVELOPMENT_WS/src/aims_cdt_week/jackal_viz.rviz"
+tmux send-keys "rviz -d $DEVELOPMENT_WS/src/aims_ori_wheel/jackal_viz.rviz"
 
 # Set default window
 tmux select-window -t $SESSION:7

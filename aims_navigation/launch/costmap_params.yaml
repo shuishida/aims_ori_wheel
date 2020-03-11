@@ -1,0 +1,6 @@
+static_map: true
+inflation_radius: 0.25
+cost_scaling_factor: 0.2
+robot_radius: 0.5
+global_frame: map
+robot_base_frame: static_base

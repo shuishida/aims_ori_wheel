@@ -1,0 +1,19 @@
+<launch>
+  <!--
+  NOTE: You'll need to bring up something that publishes sensor data (see
+  rosstage), something that publishes a map (see map_server), and something to
+  visualize a costmap (see nav_view), to see things work.
+
+  Also, on a real robot, you'd want to set the "use_sim_time" parameter to false, or just not set it.
+  -->
+
+  <node name="transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 map static_base 10"/>
+
+  <node name="mapServer" pkg="map_server" type="map_server" args="$(find aims_navigation)/maps/cdt/map.yaml" />
+
+  <!-- Run the costmap node -->
+  <node name="map" pkg="costmap_2d" type="costmap_2d_node" >
+    <rosparam file="$(find aims_navigation)/launch/costmap_params.yaml" command="load" ns="costmap" />
+  </node>
+
+</launch>
