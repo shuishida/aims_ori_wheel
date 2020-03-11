@@ -546,12 +546,17 @@ def make_check_for_person_transitions(room_info, state_factors, node_to_loc_sv):
         
         search_person_prob_postconds = {
             ConjunctionCondition(
+                CumulativeCondition(state_factors['num_people_found'], 1.0),
+                CumulativeCondition(state_factors['num_rooms_searched'], 1.0)
             
+                CumulativeCondition(state_factors['time'], time_cost)):
+                    person_found_prob,
             
-            CumulativeCondition(state_factors['time'], time_cost)):
+            ConjunctionCondition(
+                CumulativeCondition(state_factors['num_rooms_searched'], 1.0),
             
-            
-            
+                CumulativeCondition(state_factors['time'], time_cost)):
+                    1.0 - person_found_prob
         } # Stay in room. Person found or not. Time increased.
         
         search_person_transition = ProbTransition(
