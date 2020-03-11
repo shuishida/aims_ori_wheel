@@ -22,9 +22,15 @@ def ucb_selection_policy(mcts_decision_node):
     Your code needs to return a valid action that can be taken from this 
     decision node.
     """
+
     C = 1.0 # Parameter
     action_set = mcts_decision_node.enabled_actions # All possible actions
-    n_s = mcts_decision_node.observations # The number of times that this node has been visited    
+
+    for current_action in action_set:
+        if current_action not in mcts_decision_node.children.keys():
+            return current_action
+
+    n_s = mcts_decision_node.observations # The number of times that this node has been visited
     best_action = float('NaN')
     best_value = float('Inf')    
     for current_action in action_set:
