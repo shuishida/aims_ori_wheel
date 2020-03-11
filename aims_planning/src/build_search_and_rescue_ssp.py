@@ -537,7 +537,24 @@ def make_check_for_person_transitions(room_info, state_factors, node_to_loc_sv):
     The action name for these ProbTransition objects must be "check_for_person"
     """
     search_person_action_name = "check_for_person"
-    raise NotImplementedError("Your code here")
+    transitions = []
+    for doorway_edge, person_factor, rubble_factor in room_info:
+        
+        time_cost = CHECK_FOR_PERSON_TIME_COST
+        
+        search_person_precond = 
+        
+        search_person_prob_postconds = 
+        
+        search_person_transition = ProbTransition(
+            pre_cond=search_person_precond,
+            action_name=search_person_action_name,
+            prob_post_conds=search_person_prob_postconds)
+        transitions.append(search_person_transition)
+    
+    return transitions
+    # search_person_action_name = "check_for_person"
+    # raise NotImplementedError("Your code here")
 
 
 
@@ -798,7 +815,7 @@ def make_search_and_rescue_ssp(use_real_map=True):
 
 
     # Defining transitions - enforcing the time horizon
-    # To make all states over the time horizon sink states, we need to add the
+    # To make all states over the time horizon sink states, we need to add the
     # pre condition that the time is below the horizon. This means any state
     # with time having surpassed the time horizon will have zero enabled actions
     for transition in transitions:
