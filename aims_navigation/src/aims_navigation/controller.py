@@ -193,7 +193,7 @@ class Controller(object):
         #print("Velocity:")
         #print(v)
         cmd = Twist()
-        cmd.linear.x = 0.5
+        cmd.linear.x = min(v, 0.5)
         cmd.angular.z = omega
         return cmd
 
