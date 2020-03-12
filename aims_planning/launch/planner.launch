@@ -1,0 +1,18 @@
+<launch>
+  <!--
+  NOTE: You'll need to bring up something that publishes sensor data (see
+  rosstage), something that publishes a map (see map_server), and something to
+  visualize a costmap (see nav_view), to see things work.
+
+  Also, on a real robot, you'd want to set the "use_sim_time" parameter to false, or just not set it.
+  -->
+
+  <node name="planner" pkg="aims_planning" type="policy_executor.py" output="screen"/>
+
+  <node name="rubble_check" pkg="aims_rubble_check" type="rubble_check_server.py" output="screen" />
+
+  <node name="rubble_detect" pkg="aims_rubble_check" type="rubble_detect_server.py"  respawn="true" output="screen" />
+
+  <node name="rubble_clear"  pkg="aims_rubble_check" type="rubble_clear_server.py" respawn="true" output="screen" />
+
+</launch>
