@@ -137,11 +137,20 @@ class Controller(object):
             F_world = - zeta * (pos - pos_goal) # Attractive force from quadratic potential
         else: # Far from goal
             F_world = - dist_thres_goal * zeta * (pos - pos_goal) / dist_goal # ...from conical potential
+
+        #print("F")
+        #print(pos)
+        #print(pos_goal)
+        #print(dist_goal)
+        #print(F_world)
         
         # Trafo from world frame into robot frame
         robot_yaw = - self.pose_to_yaw(self.current_pose) # Angle between world fram and robot frame
         F = [np.cos(robot_yaw) * F_world[0] - np.sin(robot_yaw) * F_world[1], np.sin(robot_yaw) * F_world[0] + np.cos(robot_yaw) * F_world[1]] # Force in robot frame
-        
+
+        #print(robot_yaw)
+        #print(F)
+
         # F_mag = np.linalg.norm(F)
         # F_angle = np.arctan2(pos_goal[1] - pos[1], pos_goal[0] - pos[0])
         
@@ -176,12 +185,13 @@ class Controller(object):
         
         # F = F_att + F_rep
         # F = - gradient(U)
-        omega = k_omega * self.compute_yaw_error(0.0, np.arctan2(F[1], F[0]))
-        print("Angular velocity:")
+        print(F)
+        omega = - k_omega * self.compute_yaw_error(0.0, np.arctan2(F[1], F[0]))
+        #print("Angular velocity:")
         print(omega)
         v = k_v * np.linalg.norm(F)
-        print("Velocity:")
-        print(v)
+        #print("Velocity:")
+        #print(v)
         cmd = Twist()
         cmd.linear.x = v
         cmd.angular.z = omega
