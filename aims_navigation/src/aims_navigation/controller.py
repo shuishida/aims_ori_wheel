@@ -73,7 +73,7 @@ class Controller(object):
 
             # check if goal reached
             cur_pose = np.array((self.current_pose.position.x, self.current_pose.position.y))
-            if np.linalg.norm(abs_goal - cur_pose) < self.near_goal_tol:
+            if np.linalg.norm(goal - cur_pose) < self.near_goal_tol:
                 near_goal = True
                 rospy.loginfo('position reached')
 
@@ -125,21 +125,23 @@ class Controller(object):
         Returns:
             cmd: a ROS twist message specifying an appropriate velocity command
         """
+        k_omega = 1.0 # Controller gain for angular velocity
+        k_v = 1.0 # Controller gain for velocity
         dist_thres_goal = 1.0 # Distance threshold for switching between quadratic and conical attractive potential
         zeta = 1.0 # Gain for attractive potential
         dist_thres_obstacle = 0.6 # Distance threshold for switching to zero repulsive potential
         eta = 1.0 # Gain for repulsive potential
         pos = np.array([self.current_pose.position.x, self.current_pose.position.y]
-        pos_goal = np.asarray(local_goal)
-        dist_goal = np.linalg.norm(pos - pos_goal)
+        pos_goal = np.asarray(local_goal) # Coordinates of goal
+        dist_goal = np.linalg.norm(pos - pos_goal) # Euclidean distance between robot and goal
         if dist_goal <= dist_thres_goal: # Near to goal
             F_world = - zeta * (pos - pos_goal) # Attractive force from quadratic potential
         else: # Far from goal
             F_world = - dist_thres_goal * zeta * (pos - pos_goal) / dist # ...from conical potential
         
         # Trafo from world frame into robot frame
-        robot_yaw = - self.pose_to_yaw(self.current_pose.orientation)
-        F = [np.cos(robot_yaw) * F_world[0] - np.sin(robot_yaw) * F_world[1], np.sin(robot_yaw) * F_world[0] + np.cos(robot_yaw) * F_world[1]]
+        robot_yaw = - self.pose_to_yaw(self.current_pose.orientation) # Angle between world fram and robot frame
+        F = [np.cos(robot_yaw) * F_world[0] - np.sin(robot_yaw) * F_world[1], np.sin(robot_yaw) * F_world[0] + np.cos(robot_yaw) * F_world[1]] # Force in robot frame
         
         # F_mag = np.linalg.norm(F)
         # F_angle = np.arctan2(pos_goal[1] - pos[1], pos_goal[0] - pos[0])
@@ -168,15 +170,15 @@ class Controller(object):
             
             if dist_obstacle <= dist_thres_obstacle:
                 F_mag = - eta * (1.0/dist_thres_obstacle - 1.0/dist_obstacle) * 1.0/(dist_obstacle**2) * grad_dist_obstacle
-            
-            theta = angles[i]
-            F[0] = F[0] + F_mag * np.cos(theta)
-            F[1] = F[1] + F_mag * np.sin(theta)
+                
+                theta = angles[i]
+                F[0] = F[0] + F_mag * np.cos(theta)
+                F[1] = F[1] + F_mag * np.sin(theta)
         
         # F = F_att + F_rep
         # F = - gradient(U)
-        omega = np.atan2(F[1], F[0])
-        v = np.linalg.norm(F)
+        omega = k_omega * np.atan2(F[1], F[0])
+        v = k_v * np.linalg.norm(F)
         cmd = Twist()
         cmd.linear = [v, 0.0, 0.0]
         cmd.angular = [0.0, 0.0, omega]
