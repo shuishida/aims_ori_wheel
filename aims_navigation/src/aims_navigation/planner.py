@@ -3,9 +3,10 @@
 import rospy
 import math
 import numpy as np
-from scipy.spatial import KDTree
 from nav_msgs.msg import OccupancyGrid, Path
 from geometry_msgs.msg import PoseStamped, Pose
+from aims_navigation.prm import PRM
+
 
 class Planner(object):
     """ class for planning a path from the robot location to a goal location. """
@@ -28,16 +29,18 @@ class Planner(object):
         ##################################################################
         #************** execute any required precomputation. ************#
         ##################################################################
+        self.prm = PRM(self.sample_points(1000), self.is_collision, 10)
+
 
     def plan(self, goal_pose):
         """ generates a plan from the start pose to the goal pose. To determine
-        the start pose the function waits for a message of type estimatedpose
+        the start pose the function waits for a message of type estsample_points(self, n_sample)sample_points(self, n_sample)imatedpose
         which will be provided by your localisation system. For testing purposes
         this may be replaced by a suitable start pose.
 
         Args:
             goal_pose: a ROS pose message specifying the desired final pose of
-            the robot.
+            the robot.from scipy.spatial import KDTree
         Returns:
             result: a boolean describing whether the planner succeeded or failed
             plan: a list of tuples of defining the path of the format
@@ -55,11 +58,22 @@ class Planner(object):
         ##############################################################
         #********** compute the plan and the result here ************#
         ##############################################################
-        result, plan = True, [(0.5, 0.5), (1.2, 1.5), (2.1, 2.2)]
+
+        start_point = start_pose.pose.position.x, start_pose.pose.position.y
+        goal_point = goal_pose.position.x, goal_pose.position.y
+        try:
+            plan = self.prm.plan(start_point, goal_point)
+            result = True
+        except Exception as e:
+            print("planning failed")
+            print(e)
+            plan = []
+            result = False
 
         # publish the plan so that it can be visualised on rviz
         self.publish_path(plan)
         return result, plan
+
 
     def publish_path(self, pts):
         """ publishes the current path to view in rviz.
@@ -108,7 +122,7 @@ class Planner(object):
 
         points = []
 
-        while len(self.x_points) < n_sample:
+        while len(points) < n_sample:
             sx = np.random.uniform(self.min_x, self.max_x)
             sy = np.random.uniform(self.min_y, self.max_y)
 
