@@ -177,7 +177,7 @@ class Controller(object):
         
         # F = F_att + F_rep
         # F = - gradient(U)
-        omega = - k_omega * np.atan2(F[1], F[0])
+        omega = k_omega * compute_yaw_error(0.0, np.atan2(F[1], F[0]))
         v = k_v * np.linalg.norm(F)
         cmd = Twist()
         cmd.linear = [v, 0.0, 0.0]
