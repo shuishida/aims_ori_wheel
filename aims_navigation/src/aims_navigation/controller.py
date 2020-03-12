@@ -58,7 +58,7 @@ class Controller(object):
 
         # publish controls at 10hz until near goal
         near_goal = False
-        r = rospy.Rate(10)
+        rate = rospy.Rate(10)
         while not near_goal:
 
             # get a local goal to follow the path
@@ -69,7 +69,7 @@ class Controller(object):
             ##################################################################
             cmd = self.compute_vel(local_goal)
             self.vel_pub.publish(cmd)
-            r.sleep()
+            rate.sleep()
 
             # check if goal reached
             cur_pose = np.array((self.current_pose.position.x, self.current_pose.position.y))
@@ -94,7 +94,7 @@ class Controller(object):
             # P controller
             k = 0.1 # Controller gain
             y = self.pose_to_yaw(self.current_pose) # Measurement (actual heading)
-            r = self.pose_to_yaw(goal_pose.orientation) # Reference (desired heading)
+            r = self.pose_to_yaw(goal_pose) # Reference (desired heading)
             e = self.compute_yaw_error(r, y) # Error
             if e <= max_err:
                 near_orientation = True
@@ -103,7 +103,7 @@ class Controller(object):
                 cmd = Twist() # Create message
                 cmd.angular.z = u
                 self.vel_pub.publish(cmd)
-                r.sleep()
+                rate.sleep()
 
             if check_preempted():
                 preempted = True
@@ -127,9 +127,9 @@ class Controller(object):
         k_omega = 0.5 # Controller gain for angular velocity
         k_v = 0.5 # Controller gain for velocity
         dist_thres_goal = 1.0 # Distance threshold for switching between quadratic and conical attractive potential
-        zeta = 1.0 # Gain for attractive potential
-        dist_thres_obstacle = 0.6*0.0 # Distance threshold for switching to zero repulsive potential
-        eta = 1.0*0.0 # Gain for repulsive potential
+        zeta = 10.0 # Gain for attractive potential
+        dist_thres_obstacle = 0.6 # Distance threshold for switching to zero repulsive potential
+        eta = 1.0 # Gain for repulsive potential
         pos = np.array([self.current_pose.position.x, self.current_pose.position.y])
         pos_goal = np.asarray(local_goal) # Coordinates of goal
         dist_goal = np.linalg.norm(pos - pos_goal) # Euclidean distance between robot and goal
@@ -146,7 +146,7 @@ class Controller(object):
         
         # Trafo from world frame into robot frame
         robot_yaw = - self.pose_to_yaw(self.current_pose) # Angle between world fram and robot frame
-        F = [np.cos(robot_yaw) * F_world[0] - np.sin(robot_yaw) * F_world[1], np.sin(robot_yaw) * F_world[0] + np.cos(robot_yaw) * F_world[1]] # Force in robot frame
+        F = np.array([np.cos(robot_yaw) * F_world[0] - np.sin(robot_yaw) * F_world[1], np.sin(robot_yaw) * F_world[0] + np.cos(robot_yaw) * F_world[1]]) # Force in robot frame
 
         #print(robot_yaw)
         #print(F)
@@ -177,7 +177,7 @@ class Controller(object):
             grad_dist_obstacle = 1.0 # ToDo
             
             if dist_obstacle <= dist_thres_obstacle:
-                F_mag = - eta * (1.0/dist_thres_obstacle - 1.0/dist_obstacle) * 1.0/(dist_obstacle**2) * grad_dist_obstacle
+                F_mag = eta * (1.0/dist_thres_obstacle - 1.0/dist_obstacle) * 1.0/(dist_obstacle**2) * grad_dist_obstacle
                 
                 theta = angles[i]
                 F[0] = F[0] + F_mag * np.cos(theta)
@@ -193,7 +193,7 @@ class Controller(object):
         #print("Velocity:")
         #print(v)
         cmd = Twist()
-        cmd.linear.x = v
+        cmd.linear.x = 0.5
         cmd.angular.z = omega
         return cmd
 
