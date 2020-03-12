@@ -124,8 +124,8 @@ class Controller(object):
         Returns:
             cmd: a ROS twist message specifying an appropriate velocity command
         """
-        k_omega = 0.5 # Controller gain for angular velocity
-        k_v = 0.5 # Controller gain for velocity
+        k_omega = 0.2 # Controller gain for angular velocity
+        k_v = 0.5/2 # Controller gain for velocity
         dist_thres_goal = 1.0 # Distance threshold for switching between quadratic and conical attractive potential
         zeta = 10.0 # Gain for attractive potential
         dist_thres_obstacle = 0.6 # Distance threshold for switching to zero repulsive potential
@@ -189,7 +189,7 @@ class Controller(object):
         omega = - k_omega * self.compute_yaw_error(0.0, np.arctan2(F[1], F[0]))
         #print("Angular velocity:")
         print(omega)
-        v = k_v * np.linalg.norm(F)
+        v = k_v * max(0.0, F[0]) # np.linalg.norm(F)
         #print("Velocity:")
         #print(v)
         cmd = Twist()
