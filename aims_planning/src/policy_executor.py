@@ -15,7 +15,6 @@ from strands_navigation_msgs.msg import TopologicalMap
 from aims_rubble_check.msg import *
 from aims_msgs.msg import SearchRoomAction, SearchRoomGoal
 from aims_msgs.msg import NavigateAction, NavigateGoal
-from aims_door_detector.msg import DoorClearAction, DoorClearGoal
 from geometry_msgs.msg import PoseStamped
 
 from state import State
