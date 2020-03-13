@@ -35,7 +35,7 @@ tmux select-window -t $SESSION:3
 [ -f $DEVELOPMENT_WS ] && `$_SRC_ENV`
 tmux split-window -v
 tmux selectp -t 0
-tmux send-keys "roslaunch --wait topological_navigation topological_map_viz_only.launch topo_map:=aims_map"
+tmux send-keys "roslaunch --wait topological_navigation topological_map_viz_only.launch topo_map:=aims_map" C-m
 
 # sleep to start map after gazebo to avoid tf warning
 tmux selectp -t 1
@@ -52,7 +52,7 @@ tmux send-keys "roslaunch --wait aims_navigation navigation.launch" C-m
 
 tmux select-window -t $SESSION:6
 [ -f $DEVELOPMENT_WS ] && `$_SRC_ENV`
-tmux send-keys "roslaunch --wait aims_planning planner.launch"
+tmux send-keys "roslaunch --wait aims_planning planner.launch" C-m
 
 tmux select-window -t $SESSION:7
 [ -f $DEVELOPMENT_WS ] && `$_SRC_ENV`

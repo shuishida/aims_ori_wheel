@@ -90,14 +90,15 @@ class Controller(object):
             #****implement code to publish an angular velocity until the*****#
             #***********robot is facing near the desired orientation*********#
             ##################################################################
-            max_err = 2.0 / 180.0 * math.pi # Maximum tolerated heading error
+            max_err = 10.0 / 180.0 * math.pi # Maximum tolerated heading error
             # P controller
-            k = 0.1 # Controller gain
+            k = 0.3 # Controller gain
             y = self.pose_to_yaw(self.current_pose) # Measurement (actual heading)
             r = self.pose_to_yaw(goal_pose) # Reference (desired heading)
             e = self.compute_yaw_error(r, y) # Error
             if e <= max_err:
                 near_orientation = True
+                rospy.loginfo('orientation reached')
             else:
                 u = k * e # Control signal (angular velocity)
                 cmd = Twist() # Create message
@@ -128,8 +129,8 @@ class Controller(object):
         k_v = 0.5/2 # Controller gain for velocity
         dist_thres_goal = 1.0 # Distance threshold for switching between quadratic and conical attractive potential
         zeta = 10.0 # Gain for attractive potential
-        dist_thres_obstacle = 0.6 # Distance threshold for switching to zero repulsive potential
-        eta = 1.0 # Gain for repulsive potential
+        dist_thres_obstacle = 0.6*3.0 # Distance threshold for switching to zero repulsive potential
+        eta = 1.0*3.0 # Gain for repulsive potential
         pos = np.array([self.current_pose.position.x, self.current_pose.position.y])
         pos_goal = np.asarray(local_goal) # Coordinates of goal
         dist_goal = np.linalg.norm(pos - pos_goal) # Euclidean distance between robot and goal
@@ -165,23 +166,26 @@ class Controller(object):
         ranges = ranges_temp[ranges_temp >= ignore_thresh]        
         angles = angles_temp[ranges_temp >= ignore_thresh]
         
-        # is_obst = ranges.min() <= thresh    
+        # is_obst = ranges.min() <= thresh
+        min_ind = np.argmin(ranges)
+        dist_obstacle = ranges[min_ind]
+        theta = angles[min_ind]
         
         # self.current_laser        
         
-        for i in range(ranges.shape[0]):
-            dist_obstacle = ranges[i]            
-            # dist_obstacle = np.linalg.norm(pos - pos_obstacle)
-            # dist_obstacle = r
-            
-            grad_dist_obstacle = 1.0 # ToDo
-            
-            if dist_obstacle <= dist_thres_obstacle:
-                F_mag = eta * (1.0/dist_thres_obstacle - 1.0/dist_obstacle) * 1.0/(dist_obstacle**2) * grad_dist_obstacle
-                
-                theta = angles[i]
-                F[0] = F[0] + F_mag * np.cos(theta)
-                F[1] = F[1] + F_mag * np.sin(theta)
+        #for i in range(ranges.shape[0]):
+        # dist_obstacle = ranges[i]
+        # dist_obstacle = np.linalg.norm(pos - pos_obstacle)
+        # dist_obstacle = r
+
+        grad_dist_obstacle = 1.0 # ToDo
+
+        if dist_obstacle <= dist_thres_obstacle:
+            F_mag = eta * (1.0/dist_thres_obstacle - 1.0/dist_obstacle) * 1.0/(dist_obstacle**2) * grad_dist_obstacle
+
+            # theta = angles[i]
+            F[0] = F[0] + F_mag * np.cos(theta)
+            F[1] = F[1] + F_mag * np.sin(theta)
         
         # F = F_att + F_rep
         # F = - gradient(U)
@@ -193,7 +197,7 @@ class Controller(object):
         #print("Velocity:")
         #print(v)
         cmd = Twist()
-        cmd.linear.x = min(v, 0.5)
+        cmd.linear.x = min(v, 0.3)
         cmd.angular.z = omega
         return cmd
 

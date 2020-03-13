@@ -29,7 +29,7 @@ class Planner(object):
         ##################################################################
         #************** execute any required precomputation. ************#
         ##################################################################
-        self.prm = PRM(self.sample_points(1000), self.is_collision, 10)
+        self.prm = PRM(self.sample_points(3000), self.is_collision, 50)
 
 
     def plan(self, goal_pose):

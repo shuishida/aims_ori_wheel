@@ -97,7 +97,7 @@ class PRM(object):
             path.insert(0, curr_node)
             curr_node = parent[curr_node]
 
-        path = [start_node] + path + [end_node]
+        path = [start_node] + path[1:-1] + [end_node]
 
         print(path)
 

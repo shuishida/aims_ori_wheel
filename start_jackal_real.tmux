@@ -31,13 +31,13 @@ tmux send-keys "roslaunch aims_jackal_sim qr_scanner.launch " C-m
 
 tmux select-window -t $SESSION:2
 [ -f $DEVELOPMENT_WS ] && `$_SRC_ENV`
-tmux send-keys "roslaunch --wait mongodb_store mongodb_store.launch db_path:=`rospack find aims_jackal_sim`/db"
+tmux send-keys "roslaunch --wait mongodb_store mongodb_store.launch db_path:=`rospack find aims_jackal_sim`/db" C-m
 
 tmux select-window -t $SESSION:3
 [ -f $DEVELOPMENT_WS ] && `$_SRC_ENV`
 tmux split-window -v
 tmux selectp -t 0
-tmux send-keys "roslaunch --wait topological_navigation topological_map_viz_only.launch topo_map:=aims_map"
+tmux send-keys "roslaunch --wait topological_navigation topological_map_viz_only.launch topo_map:=aims_map" C-m
 
 # sleep to start map after gazebo to avoid tf warning
 tmux selectp -t 1
@@ -50,7 +50,7 @@ tmux send-keys "roslaunch --wait pf_localisation particle_filter.launch" C-m
 
 tmux select-window -t $SESSION:5
 [ -f $DEVELOPMENT_WS ] && `$_SRC_ENV`
-tmux send-keys "roslaunch aims_navigation navigation.launch"
+tmux send-keys "roslaunch aims_navigation navigation.launch" C-m
 
 # Set default window
 tmux select-window -t $SESSION:6
