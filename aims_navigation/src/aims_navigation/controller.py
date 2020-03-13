@@ -179,7 +179,7 @@ class Controller(object):
 
         grad_dist_obstacle = 1.0 # ToDo
 
-        if dist_obstacle <= 100000*dist_thres_obstacle:
+        if dist_obstacle <= dist_thres_obstacle:
             F_mag = eta * (1.0/dist_thres_obstacle - 1.0/dist_obstacle) * 1.0/(dist_obstacle**2) * grad_dist_obstacle
 
             # theta = angles[i]

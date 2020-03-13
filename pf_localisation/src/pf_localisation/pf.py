@@ -231,7 +231,7 @@ class PFLocaliser(PFLocaliserBase):
 
         self.particlecloud.poses = resample(self.particlecloud.poses, w)
         
-        for i in range(50):
+        for i in range(60):
             self.particlecloud.poses[i] = self.generate_random_pose()
 
         # self.NUMBER_PREDICTED_READINGS
@@ -257,8 +257,10 @@ class PFLocaliser(PFLocaliserBase):
         """
         estimate = Pose()  # Instantiate pose estimate
         # estimate.position = np.mean([pose.position for pose in self.particlecloud.poses])  # Average points (position)
+        '''
         # sklearn.cluster.DBSCAN(eps=0.5, min_samples=5, metric='euclidean', metric_params=None, algorithm='auto', leaf_size=30, p=None, n_jobs=None)
         X = [[getattr(pose.position, k) for k in ['x', 'y', 'z']] for pose in self.particlecloud.poses]
+        print('X init')
         clustering = DBSCAN(eps=0.07, min_samples=5).fit(X)
         print('Clustering done')
         # eps: The maximum distance between two samples for one to be considered as in the neighborhood of the other.
@@ -283,10 +285,10 @@ class PFLocaliser(PFLocaliserBase):
         print(mean)
         estimate.position.x = mean[0]
         estimate.position.y = mean[1]
-
-        # for k in ['x', 'y', 'z']:
-            # mean = np.mean([getattr(pose.position, k) for pose in self.particlecloud.poses])
-            # setattr(estimate.position, k, mean)
+        '''
+        for k in ['x', 'y', 'z']:
+            mean = np.mean([getattr(pose.position, k) for pose in self.particlecloud.poses])
+            setattr(estimate.position, k, mean)
 
         def avg_quaternion(poses):
             """ Q is     an Mx4 matrix of quaternions. Q_avg is the average quaternion.
