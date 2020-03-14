@@ -5,6 +5,7 @@ import rospy
 import copy
 import math
 import time
+import pyttsx3
 
 from build_search_and_rescue_ssp import make_search_and_rescue_ssp
 from build_search_and_rescue_ssp import get_rubble_clearing_time_cost
@@ -16,6 +17,7 @@ from aims_rubble_check.msg import *
 from aims_msgs.msg import SearchRoomAction, SearchRoomGoal
 from aims_msgs.msg import NavigateAction, NavigateGoal
 from geometry_msgs.msg import PoseStamped
+from std_msgs.msg import String
 
 from state import State
 from mcts import mcts
@@ -60,6 +62,12 @@ def create_clients():
                                                          RubbleClearAction)
     clients['rubble_clear'].wait_for_server()
     rospy.loginfo("rubble clear connected")
+
+    # rospy.loginfo("Waiting for speaker")
+    # clients['speak'] = actionlib.SimpleActionClient('speak',
+    #                                                        SearchRoomAction)
+    # clients['speak'].wait_for_server()
+    # rospy.loginfo("speaker connected")
 
     rospy.loginfo("All clients for policy executor set up")
 
@@ -189,8 +197,21 @@ def call_search_for_person_action(planning_action, clients):
     def is_found():
         res = clients['search_room'].get_result()
         if res.target_found:
+
+            engine = pyttsx3.init()
+            engine.setProperty('rate', 140)
+            engine.say('A victim has been observed.')
+            engine.runAndWait()
+
             return 'found'
         else:
+
+            engine = pyttsx3.init()
+            engine.setProperty('rate', 140)
+            engine.say('Empty room.')
+            engine.runAndWait()
+            #clients['speak'].speak()
+
             return 'missing'
 
     finished_fn = lambda: is_finished()

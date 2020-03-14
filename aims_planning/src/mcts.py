@@ -151,10 +151,10 @@ def random_rollout_policy(state, enabled_actions):
     if state[
         'room_4_person'] != 'unknown' and 'WayPoint6' in action and len(action) > 1: # Room 4 already searched and can move into room 4 as well as to other location
         action = [a for a in action if a != 'WayPoint6']
-    if len(action) > 1:
-        print("No scripting available, but more than 1 action.")
-        print(state)
-        print(action)
+    #if len(action) > 1:
+        #print("No scripting available, but more than 1 action.")
+        #print(state)
+        #print(action)
     return np.random.choice(action)
 
 
