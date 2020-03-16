@@ -19,6 +19,7 @@ import tf  # for converting to and from quaternions
 from util import rotateQuaternion, getHeading
 from random import random, randrange, gauss, shuffle
 import time
+from sklearn.cluster import DBSCAN
 
 
 
@@ -50,7 +51,7 @@ class PFLocaliser(PFLocaliserBase):
         self.NUMBER_PREDICTED_READINGS = 50  # Number of readings to predict
 
         # Generating particles
-        # NOTE: The number of particles will be needed in the functions you 
+        # NOTE: The number of particles will be needed in the functions you
         # implement. Use and adjust this value to see the effect on performance!
         self.NUMBER_PARTICLES = 500
 
@@ -231,7 +232,7 @@ class PFLocaliser(PFLocaliserBase):
 
         self.particlecloud.poses = resample(self.particlecloud.poses, w)
         
-        for i in range(40):
+        for i in range(60):
             self.particlecloud.poses[i] = self.generate_random_pose()
 
         # self.NUMBER_PREDICTED_READINGS
@@ -258,9 +259,36 @@ class PFLocaliser(PFLocaliserBase):
         estimate = Pose()  # Instantiate pose estimate
         # estimate.position = np.mean([pose.position for pose in self.particlecloud.poses])  # Average points (position)
 
-        for k in ['x', 'y', 'z']:
-            mean = np.mean([getattr(pose.position, k) for pose in self.particlecloud.poses])
-            setattr(estimate.position, k, mean)
+        # sklearn.cluster.DBSCAN(eps=0.5, min_samples=5, metric='euclidean', metric_params=None, algorithm='auto', leaf_size=30, p=None, n_jobs=None)
+        X = [[getattr(pose.position, k) for k in ['x', 'y', 'z']] for pose in self.particlecloud.poses]
+        print('X init')
+        clustering = DBSCAN(eps=0.07, min_samples=5).fit(X)
+        print('Clustering done')
+        # eps: The maximum distance between two samples for one to be considered as in the neighborhood of the other.
+        # min_samples: The number of samples (or total weight) in a neighborhood for a point to be considered as a core point. This includes the point itself.
+        labels = clustering.labels_
+        labels = list(labels)
+        centroid_label = max(set(labels), key=labels.count)  # Label of cluster which occurs most often
+        centroid_label = max(0, centroid_label)
+        centroid_label = min(max(labels), centroid_label)
+        # print(labels)
+        print(centroid_label)
+        # ind = np.where(np.array(labels) == centroid_label) # Indices of labels of most important cluster
+        # print(ind)
+        # ind = ind[0]
+        # print(ind)
+        # X = np.array(X)
+        # X_centroid = X[ind]
+        X_centroid = [X[i] for i, x in enumerate(labels) if x == centroid_label]
+        # print(X_centroid)
+        mean = np.mean(X_centroid, axis=0)
+        print(mean)
+        estimate.position.x = mean[0]
+        estimate.position.y = mean[1]
+
+        # for k in ['x', 'y', 'z']:
+        #     mean = np.mean([getattr(pose.position, k) for pose in self.particlecloud.poses])
+        #     setattr(estimate.position, k, mean)
 
         def avg_quaternion(poses):
             """ Q is     an Mx4 matrix of quaternions. Q_avg is the average quaternion.
