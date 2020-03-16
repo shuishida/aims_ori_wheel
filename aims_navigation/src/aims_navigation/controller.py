@@ -96,7 +96,7 @@ class Controller(object):
             y = self.pose_to_yaw(self.current_pose) # Measurement (actual heading)
             r = self.pose_to_yaw(goal_pose) # Reference (desired heading)
             e = self.compute_yaw_error(r, y) # Error
-            if e <= max_err:
+            if abs(e) <= max_err:
                 near_orientation = True
                 rospy.loginfo('orientation reached')
             else:
