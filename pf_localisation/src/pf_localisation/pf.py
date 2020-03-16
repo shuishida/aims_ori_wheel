@@ -45,7 +45,7 @@ class PFLocaliser(PFLocaliserBase):
         # Set motion model parameters
         self.ODOM_ROTATION_NOISE = 0.00006081294        # Odometry model rotation noise
         self.ODOM_TRANSLATION_NOISE = 0.00007881588     # Odometry x axis (fwd) noise
-        self.ODOM_DRIFT_NOISE = 0.0003284  # Odometry y axis (side-side) noise
+        self.ODOM_DRIFT_NOISE = 0.0003284 / 1.0  # Odometry y axis (side-side) noise
 
         # Sensor model parameters
         self.NUMBER_PREDICTED_READINGS = 50  # Number of readings to predict
@@ -262,7 +262,7 @@ class PFLocaliser(PFLocaliserBase):
         # sklearn.cluster.DBSCAN(eps=0.5, min_samples=5, metric='euclidean', metric_params=None, algorithm='auto', leaf_size=30, p=None, n_jobs=None)
         X = [[getattr(pose.position, k) for k in ['x', 'y', 'z']] for pose in self.particlecloud.poses]
         print('X init')
-        clustering = DBSCAN(eps=0.07, min_samples=5).fit(X)
+        clustering = DBSCAN(eps=0.07, min_samples=8).fit(X)
         print('Clustering done')
         # eps: The maximum distance between two samples for one to be considered as in the neighborhood of the other.
         # min_samples: The number of samples (or total weight) in a neighborhood for a point to be considered as a core point. This includes the point itself.

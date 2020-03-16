@@ -18,7 +18,7 @@ def get_door_prob():
 
 def get_time_lim():
     """ returns the maximum time before sim times out """
-    return 500
+    return 5000
 
 def get_num_targets():
     """ returns the known number of targets """
@@ -38,7 +38,7 @@ def get_rubble_locations():
     """ possible locations to spawn doors into """
 
     locs = [
-            {'x':1.45, 'y':1.9, 'angle':-0.3, 'loc':1, 'probs':{None:0.3, 'small':0.4, 'medium':0., 'large':0.3}},
+            {'x':1.55, 'y':2.15, 'angle':-0.3, 'loc':1, 'probs':{None:0.3, 'small':0.4, 'medium':0., 'large':0.3}},
             {'x':-1.5, 'y':1.75, 'angle':0.2, 'loc':2, 'probs':{None:0.3, 'small':0.4, 'medium':0., 'large':0.3}},
             {'x':-0.9, 'y':3.7, 'angle':1.67, 'loc':3, 'probs':{None:0.3, 'small':0.4, 'medium':0., 'large':0.3}},
             {'x':1., 'y':3.1, 'angle':1.47, 'loc':4, 'probs':{None:0.3, 'small':0.4, 'medium':0., 'large':0.3}}

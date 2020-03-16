@@ -19,7 +19,7 @@ class Controller(object):
         self.vel_pub = rospy.Publisher("cmd_vel", Twist, queue_size = 5)
 
         # declare constants
-        self.near_goal_tol = 0.3
+        self.near_goal_tol = 0.25
         self.lookahead_dist = 1.
 
     def store_pose(self, data):
@@ -90,7 +90,7 @@ class Controller(object):
             #****implement code to publish an angular velocity until the*****#
             #***********robot is facing near the desired orientation*********#
             ##################################################################
-            max_err = 10.0 / 180.0 * math.pi # Maximum tolerated heading error
+            max_err = 5.0 / 180.0 * math.pi # Maximum tolerated heading error
             # P controller
             k = 0.3/1.5 # Controller gain
             y = self.pose_to_yaw(self.current_pose) # Measurement (actual heading)
@@ -129,7 +129,7 @@ class Controller(object):
         k_v = 0.5/3.0 # Controller gain for velocity
         dist_thres_goal = 1.0 # Distance threshold for switching between quadratic and conical attractive potential
         zeta = 10.0 # Gain for attractive potential
-        dist_thres_obstacle = 0.6*2.0 # Distance threshold for switching to zero repulsive potential
+        dist_thres_obstacle = 0.6*32.5 # Distance threshold for switching to zero repulsive potential
         eta = 1.0*1.0 # Gain for repulsive potential
         pos = np.array([self.current_pose.position.x, self.current_pose.position.y])
         pos_goal = np.asarray(local_goal) # Coordinates of goal

@@ -8,7 +8,7 @@ import numpy as np
 if __name__ == "__main__":
     rospy.wait_for_service('sim_reset')
     srv = rospy.ServiceProxy('sim_reset', SimReset)
-    resp = srv(np.random.randint(low = 0, high = 1000))
+    resp = srv(2)
 
     if resp.result:
         print('Sim reset successfully.')
